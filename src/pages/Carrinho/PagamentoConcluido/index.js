@@ -1,16 +1,19 @@
-import { useEffect, useState } from "react";
-import Footer from "../../../components/Footer";
-import Header from "../../../components/Header";
-import { formatarMoeda } from "../../../utils/funcoes";
-import useAuthStore from "../../../hooks/FluxoDeAutenticacao/useAuthStore";
-import { useNavigate } from "react-router-dom";
 import {
-  Truck,
   CheckCircle,
-  ShoppingCart,
   CreditCard,
+  ShoppingCart,
+  Truck,
 } from "@phosphor-icons/react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Botao from "../../../components/Botao";
+import useAuthStore from "../../../hooks/FluxoDeAutenticacao/useAuthStore";
+import { buscarComprasCliente } from "../../../services/PagamentoEcommerce";
+import { colors } from "../../../styles/colors";
+import { fonte } from "../../../styles/global";
+import LayoutBase from "../../../templates/LayoutBase";
+import RotaErrada from "../../../templates/RotaErrada";
+import { formatarMoeda } from "../../../utils/funcoes";
 import {
   ContainerNavegacaoPagamento,
   CorETamanho,
@@ -45,10 +48,6 @@ import {
   TituloEnderecoPagamento,
   TituloPagamento,
 } from "./styles";
-import { buscarComprasCliente } from "../../../services/PagamentoEcommerce";
-import RotaErrada from "../../../templates/RotaErrada";
-import { colors } from "../../../styles/colors";
-import { fonte } from "../../../styles/global";
 
 export default function PagamentoConcluido() {
   const { user } = useAuthStore();
@@ -72,8 +71,7 @@ export default function PagamentoConcluido() {
   return (
     <>
       {ultimaCompra && (
-        <>
-          <Header />
+        <LayoutBase>
           <ContainerPagamentoConcluido>
             <ContainerNavegacaoPagamento>
               <ContainerItemPagamento2>
@@ -211,8 +209,7 @@ export default function PagamentoConcluido() {
               </ContainerPagamentoDados>
             </ContainerBlocoInfos>
           </ContainerPagamentoConcluido>
-          <Footer />
-        </>
+        </LayoutBase>
       )}
       {ultimaCompra && !ultimaCompra && <RotaErrada />}
     </>

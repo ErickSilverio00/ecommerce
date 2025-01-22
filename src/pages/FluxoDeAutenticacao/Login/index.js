@@ -2,11 +2,10 @@ import { Form } from "@unform/web";
 import { Link } from "react-router-dom";
 import Botao from "../../../components/Botao";
 import CampoTexto from "../../../components/CampoTexto";
-import Footer from "../../../components/Footer";
-import Header from "../../../components/Header";
 import useCamposLogin from "../../../hooks/FluxoDeAutenticacao/Login/useCamposLogin";
 import { colors } from "../../../styles/colors";
 import { fonte } from "../../../styles/global";
+import LayoutBase from "../../../templates/LayoutBase";
 import {
   ContainerBotao,
   ContainerCamposFormulario,
@@ -24,8 +23,7 @@ export default function Login() {
   const { isLoading, formLoginRef, validarLogin } = useCamposLogin();
 
   return (
-    <>
-      <Header />
+    <LayoutBase>
       <MainLogin>
         <ContainerFormulario>
           <ContainerTituloFormulario>
@@ -65,7 +63,6 @@ export default function Login() {
           </ContainerIrParaCadastro>
         </ContainerFormulario>
       </MainLogin>
-      <Footer />
-    </>
+    </LayoutBase>
   );
 }

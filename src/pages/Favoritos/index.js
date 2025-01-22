@@ -1,25 +1,24 @@
-import Footer from "../../components/Footer";
-import Header from "../../components/Header";
-import { Heart } from "@phosphor-icons/react";
-import Produto from "../../components/Produto";
 import { useMediaQuery } from "@mui/material";
-import useProdutosCurtidos from "../../hooks/ProdutosCurtidos/useProdutosCurtidos";
-import Botao from "../../components/Botao";
+import { Heart } from "@phosphor-icons/react";
 import { useNavigate } from "react-router-dom";
+import Botao from "../../components/Botao";
+import Produto from "../../components/Produto";
+import useProdutosCurtidos from "../../hooks/ProdutosCurtidos/useProdutosCurtidos";
+import { colors } from "../../styles/colors";
+import { fonte } from "../../styles/global";
+import LayoutBase from "../../templates/LayoutBase";
 import { formatarMedidas, formatarMoeda } from "../../utils/funcoes";
+import {
+  ContainerCarrinhoVazio,
+  TextoDescricaoCarrinhoVazio,
+  TextoTituloCarrinhoVazio,
+} from "../Carrinho/styles";
 import {
   ContainerFavoritos,
   ContainerProdutosFavoritos,
   ContainerTitulo,
   Titulo,
 } from "./styles";
-import {
-  ContainerCarrinhoVazio,
-  TextoDescricaoCarrinhoVazio,
-  TextoTituloCarrinhoVazio,
-} from "../Carrinho/styles";
-import { colors } from "../../styles/colors";
-import { fonte } from "../../styles/global";
 
 export default function Favoritos() {
   const firstMediaQuery = useMediaQuery("(max-width: 672px)");
@@ -27,8 +26,7 @@ export default function Favoritos() {
   const navigate = useNavigate();
 
   return (
-    <>
-      <Header />
+    <LayoutBase>
       <main>
         <ContainerFavoritos>
           {produtosCurtidos.produtosCurtidos.length > 0 && (
@@ -86,7 +84,6 @@ export default function Favoritos() {
           )}
         </ContainerFavoritos>
       </main>
-      <Footer />
-    </>
+    </LayoutBase>
   );
 }

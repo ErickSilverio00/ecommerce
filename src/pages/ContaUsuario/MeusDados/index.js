@@ -1,14 +1,18 @@
-import React, { useEffect, useState } from "react";
+import { useMediaQuery } from "@mui/material";
 import {
-  Gear,
-  Notepad,
-  MapPinLine,
   CaretLeft,
+  Gear,
+  MapPinLine,
+  Notepad,
   ShoppingCart,
 } from "@phosphor-icons/react";
+import Axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Botao from "../../../components/Botao";
 import CampoTexto from "../../../components/CampoTexto";
-import { useMediaQuery } from "@mui/material";
 import useAuthStore from "../../../hooks/FluxoDeAutenticacao/useAuthStore";
 import {
   atualizarDadosCadastraisEcommerce,
@@ -16,10 +20,9 @@ import {
   deleteCliente,
   fetchClientePorId,
 } from "../../../services/Clientes";
+import { colors } from "../../../styles/colors";
+import { fonte } from "../../../styles/global";
 import { formatarData } from "../../../utils/funcoes";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import {
   ContainerBlocoNav,
   ContainerBotoesDadosCadastrais,
@@ -48,10 +51,6 @@ import {
   TituloMeusDados,
   TituloNaoTemEndereco,
 } from "./styles";
-import ModalFeedback2 from "../../../components/ModalFeedback2";
-import Axios from "axios";
-import { colors } from "../../../styles/colors";
-import { fonte } from "../../../styles/global";
 
 export default function MeusDados({
   aoApertarInicioNosMeusDados,
@@ -607,23 +606,6 @@ export default function MeusDados({
           </ContainerEndereco>
         </ContainerLadoDireito>
       </ContainerConteudoMeusDados>
-      <ModalFeedback2
-        titulo="Você tem certeza que deseja excluir sua conta?"
-        descricao="Essa alteração não poderá ser desfeita!"
-        textoBotao1="Sim"
-        textoBotao2="Não"
-        open={botaoExcluirClicado}
-        corDeFundoBotao1={colors.branco}
-        corDeFundoHoverBotao1="#f0e6e6"
-        corDeFundoBotao2={colors.vermelho}
-        corDeFundoHoverBotao2={colors.vermelhoClaro}
-        corTextoBotao1={colors.vermelho}
-        corTextoBotao2={colors.branco}
-        aoClicarNoPrimeiroBotao={excluirCliente}
-        aoClicarNoBotao2={() => {
-          setBotaoExcluirClicado(false);
-        }}
-      />
     </ContainerMeusDados>
   );
 }

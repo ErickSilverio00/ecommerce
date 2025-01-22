@@ -8,8 +8,7 @@ export const MainEsqueciSenha = styled.main`
   justify-content: center;
   flex-direction: column;
   margin-top: 110px;
-  padding: 41.5px;
-  height: calc(100vh - 450px);
+  padding: 40px;
 
   @media (max-width: 500px) {
     margin-top: 63px;
@@ -17,7 +16,7 @@ export const MainEsqueciSenha = styled.main`
   }
 `;
 
-export const ContainerFormulario = styled.form`
+export const ContainerFormulario = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;

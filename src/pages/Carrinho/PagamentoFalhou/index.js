@@ -1,8 +1,15 @@
-import Botao from "../../../components/Botao";
-import Footer from "../../../components/Footer";
-import Header from "../../../components/Header";
+import { CreditCard, ShoppingCart, XCircle } from "@phosphor-icons/react";
 import { useNavigate } from "react-router-dom";
-import { XCircle, ShoppingCart, CreditCard } from "@phosphor-icons/react";
+import Botao from "../../../components/Botao";
+import { colors } from "../../../styles/colors";
+import { fonte } from "../../../styles/global";
+import LayoutBase from "../../../templates/LayoutBase";
+import {
+  ContainerItemPagamento,
+  ContainerNavegacaoPagamento,
+  LinhaPagamento,
+  TextoItemPagamento,
+} from "../styles";
 import {
   ContainerFalhouPedido,
   ContainerMain,
@@ -11,21 +18,12 @@ import {
   DescricaoPedidofalhou1,
   TituloPedidoFalhou,
 } from "./styles";
-import {
-  ContainerItemPagamento,
-  ContainerNavegacaoPagamento,
-  LinhaPagamento,
-  TextoItemPagamento,
-} from "../styles";
-import { colors } from "../../../styles/colors";
-import { fonte } from "../../../styles/global";
 
 export default function PagamentoFalhou() {
   const navigate = useNavigate();
 
   return (
-    <>
-      <Header />
+    <LayoutBase>
       <ContainerMain>
         <ContainerFalhouPedido>
           <ContainerNavegacaoPagamento style={{ marginBottom: 40 }}>
@@ -85,7 +83,6 @@ export default function PagamentoFalhou() {
           />
         </ContainerFalhouPedido>
       </ContainerMain>
-      <Footer />
-    </>
+    </LayoutBase>
   );
 }

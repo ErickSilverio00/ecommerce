@@ -1,19 +1,20 @@
-import React, { useEffect, useState } from "react";
-import Header from "../../components/Header";
-import Footer from "../../components/Footer";
-import fundoCalcados from "../../assets/img/Calcados.png";
-import TituloSubtituloSecoes from "../../components/TituloSubtituloSecoes";
-import Produto from "../../components/Produto";
-import { fetchProdutos } from "../../services/Produtos";
-import { formatarMedidas, formatarMoeda } from "../../utils/funcoes";
-import CampoSelecionar from "../../components/CampoSelecionar";
-import { Plus, Minus, Funnel, ArrowLeft } from "@phosphor-icons/react";
-import logo from "../../assets/img/logoMatheusCalcados.png";
-import Loading from "../../assets/animations/loading2-MC.json";
-import Lottie from "lottie-react";
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useMediaQuery } from "@mui/material";
 import Drawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
+import { ArrowLeft, Funnel, Minus, Plus } from "@phosphor-icons/react";
+import Lottie from "lottie-react";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import Loading from "../../assets/animations/loading2-MC.json";
+import logo from "../../assets/img/logoMatheusCalcados.png";
+import CampoSelecionar from "../../components/CampoSelecionar";
+import Produto from "../../components/Produto";
+import TituloSubtituloSecoes from "../../components/TituloSubtituloSecoes";
+import { fetchProdutos } from "../../services/Produtos";
+import { colors } from "../../styles/colors";
+import LayoutBase from "../../templates/LayoutBase";
+import { formatarMedidas, formatarMoeda } from "../../utils/funcoes";
 import {
   CheckboxCategoria,
   CheckboxCor,
@@ -47,40 +48,15 @@ import {
   TextoFiltros,
   TextoNaoEncontrou,
 } from "./styles";
-import { colors } from "../../styles/colors";
 
-const categorias = ["Chinelos", "Sandálias", "Sapatos", "Tênis"];
-
-const cores = [
-  "Amarelo",
-  "Azul",
-  "Branco",
-  "Cinza",
-  "Marrom",
-  "Preto",
-  "Rosa",
-  "Roxo",
-  "Verde",
-  "Vermelho",
-];
-
-const tamanhos = [
-  "33",
-  "34",
-  "35",
-  "36",
-  "37",
-  "38",
-  "39",
-  "40",
-  "41",
-  "42",
-  "43",
-  "44",
-  "45",
-];
-
-export default function Calcados() {
+export default function LayoutPaginaProdutos({
+  tituloSecao,
+  imagemSecao,
+  categorias,
+  tamanhos,
+  temImagemFundo = true,
+}) {
+  const { busca } = useParams();
   const firstMediaQuery = useMediaQuery("(max-width: 772px)");
   const [produtosDisponiveis, setProdutosDisponiveis] = useState([]);
   const [categoriasVisiveis, setCategoriasVisiveis] = useState(false);
@@ -94,6 +70,19 @@ export default function Calcados() {
   const [checkboxesSelecionados, setCheckboxesSelecionados] = useState(false);
   const [ordenacaoProduto, setOrdenacaoProduto] = useState("");
   const [drawerOpen, setDrawerOpen] = useState(false);
+
+  const cores = [
+    "Amarelo",
+    "Azul",
+    "Branco",
+    "Cinza",
+    "Marrom",
+    "Preto",
+    "Rosa",
+    "Roxo",
+    "Verde",
+    "Vermelho",
+  ];
 
   const toggleVisibility = (stateSetter) => {
     stateSetter((prev) => !prev);
@@ -152,17 +141,59 @@ export default function Calcados() {
     const loadProducts = async () => {
       try {
         const produtos = await fetchProdutos();
-        const produtosCalcados = produtos.filter(
-          (produto) => produto.categoria_produto === "Calçados"
-        );
-        setProdutosDisponiveis(produtosCalcados);
+
+        if (temImagemFundo) {
+          const produtosFiltrados = produtos.filter(
+            (produto) => produto.categoria_produto === tituloSecao
+          );
+          setProdutosDisponiveis(produtosFiltrados);
+        } else {
+          const produtosEncontrados = produtos.filter((produto) => {
+            const removeAccents = (str) => {
+              return str
+                .replace(/[áàãâä]/g, "a")
+                .replace(/[éèêë]/g, "e")
+                .replace(/[íìîï]/g, "i")
+                .replace(/[óòõôö]/g, "o")
+                .replace(/[úùûü]/g, "u")
+                .replace(/[ç]/g, "c");
+            };
+
+            const nomeLowerCase = removeAccents(
+              produto.nome_produto.toLowerCase()
+            );
+            const categoriaLowerCase = removeAccents(
+              produto.categoria_produto.toLowerCase()
+            );
+            const subcategoriaLowerCase = removeAccents(
+              produto.subcategoria_produto.toLowerCase()
+            );
+            const generoLowerCase = removeAccents(
+              produto.genero_produto.toLowerCase()
+            );
+            const marcaLowerCase = removeAccents(
+              produto.marca_produto.toLowerCase()
+            );
+            const buscaLowerCase = removeAccents(busca.toLowerCase());
+
+            return (
+              nomeLowerCase.includes(buscaLowerCase) ||
+              categoriaLowerCase.includes(buscaLowerCase) ||
+              subcategoriaLowerCase.includes(buscaLowerCase) ||
+              generoLowerCase.includes(buscaLowerCase) ||
+              marcaLowerCase.includes(buscaLowerCase)
+            );
+          });
+
+          setProdutosDisponiveis(produtosEncontrados);
+        }
       } catch (error) {
         console.error(error);
       }
     };
 
     loadProducts();
-  }, []);
+  }, [temImagemFundo, tituloSecao, busca]);
 
   useEffect(() => {
     if (checkboxesSelecionados) {
@@ -220,15 +251,16 @@ export default function Calcados() {
   ]);
 
   return (
-    <div>
-      <Header />
+    <LayoutBase>
       <ContainerPrincipal>
-        <ContainerSlides>
-          <ContainerImagem src={fundoCalcados} />
-        </ContainerSlides>
+        {temImagemFundo && (
+          <ContainerSlides>
+            <ContainerImagem src={imagemSecao} />
+          </ContainerSlides>
+        )}
         <ContainerBlocoProdutos id="containerBlocoProdutos">
           <ContainerPrimeiraLinha>
-            <TituloSubtituloSecoes title="Calçados" />
+            <TituloSubtituloSecoes title={tituloSecao} />
             <ContainerFiltroOrdenacao>
               <CampoSelecionar
                 label="Ordenar por"
@@ -431,8 +463,8 @@ export default function Calcados() {
                               (produto) =>
                                 produto && (
                                   <Produto
-                                    key={produto.id}
                                     idProduto={produto.id_produto}
+                                    key={produto.id}
                                     image={
                                       produto.variacoes[0]
                                         .imagens_variacao_produto[0]
@@ -454,8 +486,8 @@ export default function Calcados() {
                               (produto) =>
                                 produto && (
                                   <Produto
-                                    key={produto.id}
                                     idProduto={produto.id_produto}
+                                    key={produto.id}
                                     image={
                                       produto.variacoes[0]
                                         .imagens_variacao_produto[0]
@@ -482,7 +514,6 @@ export default function Calcados() {
           </ContainerGeralProdutos>
         </ContainerBlocoProdutos>
       </ContainerPrincipal>
-      <Footer />
 
       {/* Drawer Filtros Mobile */}
       {firstMediaQuery && (
@@ -628,6 +659,6 @@ export default function Calcados() {
           </List>
         </Drawer>
       )}
-    </div>
+    </LayoutBase>
   );
 }

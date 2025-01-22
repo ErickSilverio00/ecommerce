@@ -6,11 +6,10 @@ import AnimatedSuccess from "../../../assets/animations/successAnimation.json";
 import Botao from "../../../components/Botao";
 import CampoTexto from "../../../components/CampoTexto";
 import DateTimePicker from "../../../components/DateTimePicker";
-import Footer from "../../../components/Footer";
-import Header from "../../../components/Header";
 import useCamposCadastro from "../../../hooks/FluxoDeAutenticacao/Cadastro/useCamposCadastro";
 import { colors } from "../../../styles/colors";
 import { AreaItem, fonte } from "../../../styles/global";
+import LayoutBase from "../../../templates/LayoutBase";
 import {
   ContainerBotao,
   ContainerBotaoLogin,
@@ -39,8 +38,7 @@ export default function Cadastro() {
   } = useCamposCadastro();
 
   return (
-    <>
-      <Header />
+    <LayoutBase>
       <MainCadastro>
         {!clienteCadastrado && (
           <Form ref={formCadastroRef} onSubmit={validarCadastro}>
@@ -140,7 +138,6 @@ export default function Cadastro() {
           </ContainerCadastrado>
         )}
       </MainCadastro>
-      <Footer />
-    </>
+    </LayoutBase>
   );
 }

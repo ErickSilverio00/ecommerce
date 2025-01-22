@@ -15,12 +15,11 @@ import fundo4 from "../../assets/img/menswear.png";
 import fundo2 from "../../assets/img/natal70.png";
 import fundo5 from "../../assets/img/sapato-feminino.png";
 import ApresentacaoCategoria from "../../components/ApresentacaoCategoria";
-import Footer from "../../components/Footer";
-import Header from "../../components/Header";
 import Produto from "../../components/Produto";
 import TituloSubtituloSecoes from "../../components/TituloSubtituloSecoes";
 import { fetchProdutos } from "../../services/Produtos";
 import { colors } from "../../styles/colors";
+import LayoutBase from "../../templates/LayoutBase";
 import { formatarMedidas, formatarMoeda } from "../../utils/funcoes";
 import {
   ContainerApresentacoesCategorias,
@@ -77,8 +76,7 @@ export default function TelaInicial() {
   }, []);
 
   return (
-    <>
-      <Header />
+    <LayoutBase>
       <ContainerPrincipal>
         <ContainerSlides>
           <Swiper
@@ -213,7 +211,6 @@ export default function TelaInicial() {
           </Swiper>
         </ContainerBlocoProdutos>
       </ContainerPrincipal>
-      <Footer />
-    </>
+    </LayoutBase>
   );
 }

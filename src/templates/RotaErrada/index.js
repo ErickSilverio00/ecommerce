@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import Header from "../../components/Header";
 import imgRotaErrada from "../../assets/img/erro404.svg";
+import Header from "../../components/Header";
 import {
   BotaoPageNotFound,
   ContainerPageNotFound,

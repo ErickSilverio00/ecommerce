@@ -14,8 +14,6 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Botao from "../../components/Botao";
 import CampoTexto from "../../components/CampoTexto";
-import Footer from "../../components/Footer";
-import Header from "../../components/Header";
 import useCarrinho from "../../hooks/Carrinho/useCarrinho";
 import useAuthStore from "../../hooks/FluxoDeAutenticacao/useAuthStore";
 import { criarSessaoCheckout } from "../../services/Carrinho";
@@ -25,6 +23,7 @@ import {
 } from "../../services/Clientes";
 import { colors } from "../../styles/colors";
 import { fonte } from "../../styles/global";
+import LayoutBase from "../../templates/LayoutBase";
 import { formatarMoeda } from "../../utils/funcoes";
 import {
   ContainerBotoesEdicaoEndereco,
@@ -265,8 +264,7 @@ export default function Carrinho() {
   }, [rua, complemento, bairro, cep, cidade, naoTemEndereco]);
 
   return (
-    <>
-      <Header />
+    <LayoutBase>
       <main>
         <ContainerCarrinho>
           {carrinho.itensCarrinho.length > 0 && (
@@ -728,7 +726,6 @@ export default function Carrinho() {
           )}
         </ContainerCarrinho>
       </main>
-      <Footer />
-    </>
+    </LayoutBase>
   );
 }

@@ -5,16 +5,14 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Botao from "../../components/Botao";
 import CampoTexto from "../../components/CampoTexto";
-import Footer from "../../components/Footer";
-import Header from "../../components/Header";
 import ImageMagnifier from "../../components/ImageMagnifier";
-import ModalFeedback from "../../components/ModalFeedback";
 import useCarrinho from "../../hooks/Carrinho/useCarrinho";
 import useAuthStore from "../../hooks/FluxoDeAutenticacao/useAuthStore";
 import useProdutosCurtidos from "../../hooks/ProdutosCurtidos/useProdutosCurtidos";
 import { fetchProdutos } from "../../services/Produtos";
 import { colors } from "../../styles/colors";
 import { fonte } from "../../styles/global";
+import LayoutBase from "../../templates/LayoutBase";
 import { formatarMoeda, ordenarMedidas } from "../../utils/funcoes";
 import {
   ContainerBotaoAddCarrinho,
@@ -326,8 +324,7 @@ export default function PaginaProduto() {
   return (
     <>
       {!isLoading && produtoSelecionado && (
-        <>
-          <Header />
+        <LayoutBase>
           <main>
             <ContainerProduto>
               <ContainerEsquerdo>
@@ -616,20 +613,8 @@ export default function PaginaProduto() {
               )}
             </ContainerCep2>
           </main>
-          <Footer />
-        </>
+        </LayoutBase>
       )}
-
-      <ModalFeedback
-        aoClicarNoPrimeiroBotao={() => setModalErro(false)}
-        open={modalErro}
-        titulo="Erro ao adicionar produto ao carrinho!"
-        descricao={descricaoErro}
-        corDeFundoBotao1={colors.primaria}
-        corDeFundoHoverBotao1={colors.primariaClara}
-        corTextoBotao1={colors.branco}
-        textoBotao1="Ok"
-      />
     </>
   );
 }

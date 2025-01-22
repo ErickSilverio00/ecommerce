@@ -1,8 +1,18 @@
+import { useMediaQuery } from "@mui/material";
+import { CaretLeft, CaretRight } from "@phosphor-icons/react";
 import React, { useEffect, useRef, useState } from "react";
-import Header from "../../components/Header";
-import Footer from "../../components/Footer";
-import fundoMasculino from "../../assets/img/fundo-Masculino.png";
+import { Link } from "react-router-dom";
+import "swiper/css";
+import { Autoplay } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
 import fundoFeminino from "../../assets/img/fundo-Feminino.png";
+import fundoMasculino from "../../assets/img/fundo-Masculino.png";
+import Produto from "../../components/Produto";
+import TituloSubtituloSecoes from "../../components/TituloSubtituloSecoes";
+import { fetchProdutos } from "../../services/Produtos";
+import { colors } from "../../styles/colors";
+import LayoutBase from "../../templates/LayoutBase";
+import { formatarMedidas, formatarMoeda } from "../../utils/funcoes";
 import {
   ContainerBlocoProdutos,
   ContainerImagem,
@@ -13,17 +23,6 @@ import {
   SetaDireita,
   SetaEsquerda,
 } from "./styles";
-import { CaretLeft, CaretRight } from "@phosphor-icons/react";
-import TituloSubtituloSecoes from "../../components/TituloSubtituloSecoes";
-import Produto from "../../components/Produto";
-import { fetchProdutos } from "../../services/Produtos";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay } from "swiper/modules";
-import "swiper/css";
-import { useMediaQuery } from "@mui/material";
-import { formatarMedidas, formatarMoeda } from "../../utils/funcoes";
-import { Link } from "react-router-dom";
-import { colors } from "../../styles/colors";
 
 export default function Colecoes() {
   const firstMediaQuery = useMediaQuery("(max-width: 672px)");
@@ -137,8 +136,7 @@ export default function Colecoes() {
   }, []);
 
   return (
-    <>
-      <Header />
+    <LayoutBase>
       <ContainerPrincipal>
         <ContainerSlides>
           <Link to="/masculino" style={{ width: "100%" }}>
@@ -618,7 +616,6 @@ export default function Colecoes() {
           </Swiper>
         </ContainerBlocoProdutos>
       </ContainerPrincipal>
-      <Footer />
-    </>
+    </LayoutBase>
   );
 }

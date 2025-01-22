@@ -44,6 +44,7 @@ export default function Footer() {
         return;
       }
       toast.success("E-mail cadastrado com sucesso");
+      formEmailRef.current.reset();
     } catch (error) {
       console.error(error);
     }
