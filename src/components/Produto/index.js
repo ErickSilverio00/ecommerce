@@ -1,10 +1,13 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Heart, ShoppingCart } from "@phosphor-icons/react";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import useAuthStore from "../../hooks/FluxoDeAutenticacao/useAuthStore";
-import useProdutosCurtidos from "../../hooks/ProdutosCurtidos/useProdutosCurtidos";
+import { toast } from "react-toastify";
+import useAuthStore from "../../stores/useAuthStore";
+import useProdutosCurtidos from "../../stores/useProdutosCurtidos";
 import { colors } from "../../styles/colors";
 import { fonte } from "../../styles/global";
+import { formatarMedidas, formatarMoeda } from "../../utils/funcoes";
 import Botao from "../Botao";
 import {
   ContainerBotaoComprar,
@@ -19,17 +22,15 @@ import {
   TextSize,
 } from "./styles";
 
-export default function Produto({ idProduto, image, name, size, price, flex }) {
+export default function Produto({ produto, flex }) {
   const { user } = useAuthStore();
   const navigate = useNavigate();
   const produtosCurtidos = useProdutosCurtidos();
-
   const [liked, setLiked] = useState(false);
 
   useEffect(() => {
-    setLiked(isProductLiked(idProduto));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [idProduto]);
+    setLiked(isProductLiked(produto.id_produto));
+  }, [produto.id_produto]);
 
   const toggleLikeProduct = async () => {
     try {
@@ -38,12 +39,12 @@ export default function Produto({ idProduto, image, name, size, price, flex }) {
         return;
       }
       if (liked) {
-        const idProdutoCurtido = findIdProdutoCurtido(idProduto);
+        const idProdutoCurtido = findIdProdutoCurtido(produto.id_produto);
         await produtosCurtidos.removerProdutoCurtido(idProdutoCurtido);
       } else {
         const curtidosData = {
           idCliente: user.idCliente,
-          idProduto: idProduto,
+          ...produto,
         };
         await produtosCurtidos.adicionarProdutoCurtido(curtidosData);
         await produtosCurtidos.fetchProdutosCurtidos(user.idCliente);
@@ -51,21 +52,21 @@ export default function Produto({ idProduto, image, name, size, price, flex }) {
 
       setLiked(!liked);
     } catch (error) {
-      console.error(error);
+      toast.error(error);
     }
   };
 
   const isProductLiked = (idProduto) => {
     return produtosCurtidos.produtosCurtidos.some(
-      (produto) => produto.id_produto === idProduto
+      (produtoCurtido) => produtoCurtido.id_produto === idProduto
     );
   };
 
   const findIdProdutoCurtido = (idProduto) => {
     const produtoCurtido = produtosCurtidos.produtosCurtidos.find(
-      (produto) => produto.id_produto === idProduto
+      (produtoCurtido) => produtoCurtido.id_produto === idProduto
     );
-    return produtoCurtido ? produtoCurtido.id_produto_curtido : null;
+    return produtoCurtido ? produtoCurtido.id_produto : null;
   };
 
   return (
@@ -78,21 +79,33 @@ export default function Produto({ idProduto, image, name, size, price, flex }) {
           className="heart-icon"
         />
       </ContainerLikeProduct>
-      <Link style={{ textDecoration: "none" }} to={`/produto/${name}`}>
-        <ContainerImgProduct src={image} alt={name} />
+      <Link
+        style={{ textDecoration: "none" }}
+        to={`/produto/${produto.nome_produto}`}
+      >
+        <ContainerImgProduct
+          src={produto.variacoes[0].imagens_variacao_produto[0]}
+          alt={produto.nome_produto}
+        />
       </Link>
       <ContainerInfosProducts>
         <ContainerNameSize>
-          <TextName>{name}</TextName>
-          <TextSize>{size}</TextSize>
+          <TextName>{produto.nome_produto}</TextName>
+          <TextSize>
+            {formatarMedidas(
+              produto.variacoes.map(
+                (variacao) => variacao.medida_variacao_produto
+              )
+            )}
+          </TextSize>
         </ContainerNameSize>
         <ContainerPrice>
-          <TextPrice>{price}</TextPrice>
+          <TextPrice>{formatarMoeda(produto.preco_venda_produto)}</TextPrice>
         </ContainerPrice>
       </ContainerInfosProducts>
       <Link
         style={{ textDecoration: "none", width: "100%" }}
-        to={`/produto/${name}`}
+        to={`/produto/${produto.nome_produto}`}
       >
         <ContainerBotaoComprar>
           <Botao

@@ -7,7 +7,7 @@ import {
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Botao from "../../../components/Botao";
-import useAuthStore from "../../../hooks/FluxoDeAutenticacao/useAuthStore";
+import useAuthStore from "../../../stores/useAuthStore";
 import { buscarComprasCliente } from "../../../services/PagamentoEcommerce";
 import { colors } from "../../../styles/colors";
 import { fonte } from "../../../styles/global";

@@ -1,6 +1,6 @@
 import React, { Suspense, lazy } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
-import useAuthStore from "../hooks/FluxoDeAutenticacao/useAuthStore";
+import useAuthStore from "../stores/useAuthStore";
 import Preloading from "../templates/PreLoading";
 import RotaErrada from "../templates/RotaErrada";
 

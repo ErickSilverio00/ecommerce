@@ -1,14 +1,17 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable array-callback-return */
 import { useMediaQuery } from "@mui/material";
 import { Heart, ShoppingCart } from "@phosphor-icons/react";
-import { useEffect, useState } from "react";
+import { Form } from "@unform/web";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import Botao from "../../components/Botao";
 import CampoTexto from "../../components/CampoTexto";
 import ImageMagnifier from "../../components/ImageMagnifier";
-import useCarrinho from "../../hooks/Carrinho/useCarrinho";
-import useAuthStore from "../../hooks/FluxoDeAutenticacao/useAuthStore";
-import useProdutosCurtidos from "../../hooks/ProdutosCurtidos/useProdutosCurtidos";
+import useCarrinho from "../../stores/useCarrinho";
+import useAuthStore from "../../stores/useAuthStore";
+import useProdutosCurtidos from "../../stores/useProdutosCurtidos";
 import { fetchProdutos } from "../../services/Produtos";
 import { colors } from "../../styles/colors";
 import { fonte } from "../../styles/global";
@@ -65,6 +68,7 @@ export default function PaginaProduto() {
   const navigate = useNavigate();
   const { user } = useAuthStore();
   const firstMediaQuery = useMediaQuery("(max-width: 860px)");
+  const formCepRef = useRef(null);
   const [produtosDisponiveis, setProdutosDisponiveis] = useState([]);
   const [produtoSelecionado, setProdutoSelecionado] = useState(null);
   const [corSelecionada, setCorSelecionada] = useState(null);
@@ -74,11 +78,6 @@ export default function PaginaProduto() {
   const [isLoading, setIsLoading] = useState(true);
   const [imagemSelecionada, setImagemSelecionada] = useState(null);
   const [tamanhoSelecionado, setTamanhoSelecionado] = useState([]);
-  const [produtoCurtido, setProdutoCurtido] = useState(false);
-  const [modalErro, setModalErro] = useState(false);
-  const [descricaoErro, setDescricaoErro] = useState("");
-  const [cep, setCep] = useState("");
-  const [cepErro, setCepErro] = useState("");
   const [cepCalculado, setCepCalculado] = useState(false);
   const carrinho = useCarrinho();
   const produtosCurtidos = useProdutosCurtidos();
@@ -89,7 +88,7 @@ export default function PaginaProduto() {
       setProdutosDisponiveis(produtos);
       setIsLoading(false);
     } catch (error) {
-      console.error(error);
+      toast.error(error);
       setIsLoading(false);
     }
   }
@@ -107,46 +106,6 @@ export default function PaginaProduto() {
     setTamanhoSelecionado(tamanho);
   };
 
-  const toggleLikeProduct = async () => {
-    try {
-      const idProduto = produtoSelecionado.id_produto;
-
-      if (!user) {
-        navigate("/login");
-        return;
-      }
-
-      if (isProductLiked(idProduto)) {
-        const idProdutoCurtido = findIdProdutoCurtido(idProduto);
-        await produtosCurtidos.removerProdutoCurtido(idProdutoCurtido);
-      } else {
-        const curtidosData = {
-          idCliente: user.idCliente,
-          idProduto: idProduto,
-        };
-        await produtosCurtidos.adicionarProdutoCurtido(curtidosData);
-        produtosCurtidos.fetchProdutosCurtidos(user.idCliente);
-      }
-
-      setProdutoCurtido(!isProductLiked(idProduto));
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const isProductLiked = (idProduto) => {
-    return produtosCurtidos.produtosCurtidos.some(
-      (produto) => produto.id_produto === idProduto
-    );
-  };
-
-  const findIdProdutoCurtido = (idProduto) => {
-    const produtoCurtido = produtosCurtidos.produtosCurtidos.find(
-      (produto) => produto.id_produto === idProduto
-    );
-    return produtoCurtido ? produtoCurtido.id_produto_curtido : null;
-  };
-
   const handleComprar = async () => {
     try {
       setIsLoading(true);
@@ -162,8 +121,7 @@ export default function PaginaProduto() {
       }
 
       if (!tamanhosPorCorSelecionada.includes(tamanhoSelecionado)) {
-        setModalErro(true);
-        setDescricaoErro(
+        toast.error(
           "Você deve selecionar um tamanho do produto antes de prosseguir."
         );
         return;
@@ -175,8 +133,7 @@ export default function PaginaProduto() {
             item.id_variacao_produto === variacaoSelecionada.id_variacao_produto
         )
       ) {
-        setModalErro(true);
-        setDescricaoErro("Esse produto já foi adicionado ao carrinho.");
+        toast.error("Esse produto já foi adicionado ao carrinho.");
         return;
       }
 
@@ -192,7 +149,7 @@ export default function PaginaProduto() {
         }, 50);
       }
     } catch (error) {
-      console.error(error);
+      toast.error(error);
     } finally {
       setIsLoading(false);
     }
@@ -213,8 +170,7 @@ export default function PaginaProduto() {
       }
 
       if (!tamanhosPorCorSelecionada.includes(tamanhoSelecionado)) {
-        setModalErro(true);
-        setDescricaoErro(
+        toast.error(
           "Você deve selecionar um tamanho do produto antes de prosseguir."
         );
         return;
@@ -226,8 +182,7 @@ export default function PaginaProduto() {
             item.id_variacao_produto === variacaoSelecionada.id_variacao_produto
         )
       ) {
-        setModalErro(true);
-        setDescricaoErro("Esse produto já foi adicionado ao carrinho.");
+        toast.error("Esse produto já foi adicionado ao carrinho.");
         return;
       }
 
@@ -240,33 +195,70 @@ export default function PaginaProduto() {
         await carrinho.adicionarAoCarrinho(carrinhoData);
       }
     } catch (error) {
-      console.error(error);
+      toast.error(error);
     } finally {
       setIsLoading(false);
     }
   };
 
+  const toggleLikeProduct = async () => {
+    try {
+      const produto = produtoSelecionado;
+
+      if (!user) {
+        navigate("/login");
+        return;
+      }
+      if (isProductLiked(produto.id_produto)) {
+        const idProdutoCurtido = findIdProdutoCurtido(produto.id_produto);
+        await produtosCurtidos.removerProdutoCurtido(idProdutoCurtido);
+      } else {
+        const curtidosData = {
+          idCliente: user.idCliente,
+          ...produto,
+        };
+        await produtosCurtidos.adicionarProdutoCurtido(curtidosData);
+        produtosCurtidos.fetchProdutosCurtidos(user.idCliente);
+      }
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+
+  const isProductLiked = (idProduto) => {
+    return produtosCurtidos.produtosCurtidos.some(
+      (produto) => produto.id_produto === idProduto
+    );
+  };
+
+  const findIdProdutoCurtido = (idProduto) => {
+    const produtoCurtido = produtosCurtidos.produtosCurtidos.find(
+      (produto) => produto.id_produto === idProduto
+    );
+    return produtoCurtido ? produtoCurtido.id_produto : null;
+  };
+
   const validarCep = () => {
-    let temErro = false;
+    const cep = formCepRef?.current?.getFieldValue("cep");
 
     const cepFormatado = cep.replace(/\D/g, "");
 
-    if (!cep.trim()) {
-      setCepErro("O cep é obrigatório.");
-      setCepCalculado(false);
-      temErro = true;
+    if (!cep) {
+      formCepRef.current.setFieldError("cep", "Campo Obrigatório");
+      return false;
     } else if (cepFormatado.length !== 8) {
-      setCepErro("O CEP deve conter exatamente 8 dígitos");
-      temErro = true;
-    } else {
-      setCepErro("");
+      formCepRef.current.setFieldError(
+        "cep",
+        "O CEP deve conter exatamente 8 dígitos"
+      );
+      return false;
     }
 
-    return temErro;
+    return true;
   };
 
   const calcularCep = () => {
-    if (validarCep()) {
+    if (!validarCep()) {
       setCepCalculado(false);
       return;
     }
@@ -315,12 +307,6 @@ export default function PaginaProduto() {
     loadProducts();
   }, []);
 
-  useEffect(() => {
-    if (cep === "") {
-      setCepCalculado(false);
-    }
-  }, [cep]);
-
   return (
     <>
       {!isLoading && produtoSelecionado && (
@@ -354,48 +340,38 @@ export default function PaginaProduto() {
                       </ContainerImagem>
                     ))}
                 </ContainerImagensSecundarias>
-                <ContainerCep>
-                  <TextoSecundario>Calcule o frete</TextoSecundario>
-                  <ContainerInputCep>
-                    <CampoTexto
-                      texto="Digite seu cep"
-                      variante="outlined"
-                      tamanho="small"
-                      fullWidth
-                      style={{ flexGrow: 1, flexBasis: 200 }}
-                      tipo="text"
-                      mascara="99999-999"
-                      value={cep}
-                      aoMudar={(texto) => {
-                        setCep(texto);
-                        setCepErro("");
-                      }}
-                      erro={cepErro !== ""}
-                      textoDeAjuda={cepErro}
-                    />
-                    <Botao
-                      corDeFundo={colors.primaria}
-                      corDeFundoHover={colors.primariaClara}
-                      mostrarBoxShadow={true}
-                      corTexto={colors.branco}
-                      fontFamily={fonte}
-                      fontSize={10}
-                      fontWeight={600}
-                      flexGrow={1}
-                      flexBasis={120}
-                      width="100%"
-                      height={40}
-                      tamanho="small"
-                      variante="contained"
-                      texto="Calcular"
-                      type="button"
-                      aoClicar={calcularCep}
-                    />
-                  </ContainerInputCep>
-                  {cepCalculado && (
-                    <TextoCepCalculado>FRETE GRÁTIS</TextoCepCalculado>
-                  )}
-                </ContainerCep>
+                <Form ref={formCepRef} onSubmit={calcularCep}>
+                  <ContainerCep>
+                    <TextoSecundario>Calcule o frete</TextoSecundario>
+                    <ContainerInputCep>
+                      <CampoTexto
+                        name="cep"
+                        label="Digite seu cep"
+                        type="number"
+                      />
+                      <Botao
+                        corDeFundo={colors.primaria}
+                        corDeFundoHover={colors.primariaClara}
+                        mostrarBoxShadow={true}
+                        corTexto={colors.branco}
+                        fontFamily={fonte}
+                        fontSize={10}
+                        fontWeight={600}
+                        flexGrow={1}
+                        flexBasis={120}
+                        width="100%"
+                        height={40}
+                        tamanho="small"
+                        variante="contained"
+                        texto="Calcular"
+                        type="submit"
+                      />
+                    </ContainerInputCep>
+                    {cepCalculado && (
+                      <TextoCepCalculado>FRETE GRÁTIS</TextoCepCalculado>
+                    )}
+                  </ContainerCep>
+                </Form>
               </ContainerEsquerdo>
               <ContainerDireito>
                 <ContainerNomePreco>
@@ -506,7 +482,7 @@ export default function PaginaProduto() {
                   <ContainerBotaoAddCarrinho
                     onClick={handleAdicionarAoCarrinho}
                   >
-                    <ShoppingCart size={26} color={colors.branco} />
+                    <ShoppingCart size={28} color={colors.branco} />
                   </ContainerBotaoAddCarrinho>
                   <Heart
                     size={26}
@@ -522,7 +498,7 @@ export default function PaginaProduto() {
                 </ContainerBotoes>
                 <ContainerInfosComplementares>
                   <TextoSecundario>Tecidos & Cuidados</TextoSecundario>
-                  {produtoSelecionado.categoria_produto === "calcados" && (
+                  {produtoSelecionado.categoria_produto === "Calçados" && (
                     <ContainerTextosInfosAdicionais>
                       <TextosInfosAdicionais>
                         Somente os melhores materiais
@@ -538,7 +514,7 @@ export default function PaginaProduto() {
                       </TextosInfosAdicionais>
                     </ContainerTextosInfosAdicionais>
                   )}
-                  {produtoSelecionado.categoria_produto === "roupas" && (
+                  {produtoSelecionado.categoria_produto === "Roupas" && (
                     <ContainerTextosInfosAdicionais>
                       <TextosInfosAdicionais>
                         Lavagem à mão preferencialmente
@@ -554,7 +530,7 @@ export default function PaginaProduto() {
                       </TextosInfosAdicionais>
                     </ContainerTextosInfosAdicionais>
                   )}
-                  {produtoSelecionado.categoria_produto === "acessorios" && (
+                  {produtoSelecionado.categoria_produto === "Acessórios" && (
                     <ContainerTextosInfosAdicionais>
                       <TextosInfosAdicionais>
                         Limpar com pano seco
@@ -570,48 +546,34 @@ export default function PaginaProduto() {
                 </ContainerInfosComplementares>
               </ContainerDireito>
             </ContainerProduto>
-            <ContainerCep2>
-              <TextoSecundario>Calcule o frete</TextoSecundario>
-              <ContainerInputCep2>
-                <CampoTexto
-                  texto="Digite seu cep"
-                  variante="outlined"
-                  tamanho="small"
-                  fullWidth
-                  style={{ flexGrow: 1, flexBasis: 200 }}
-                  tipo="text"
-                  mascara="99999-999"
-                  value={cep}
-                  aoMudar={(texto) => {
-                    setCep(texto);
-                    setCepErro("");
-                  }}
-                  erro={cepErro !== ""}
-                  textoDeAjuda={cepErro}
-                />
-                <Botao
-                  corDeFundo={colors.primaria}
-                  corDeFundoHover={colors.primariaClara}
-                  mostrarBoxShadow={true}
-                  corTexto={colors.branco}
-                  fontFamily={fonte}
-                  fontSize={10}
-                  fontWeight={600}
-                  flexGrow={1}
-                  flexBasis={120}
-                  width="100%"
-                  height={40}
-                  tamanho="small"
-                  variante="contained"
-                  texto="Calcular"
-                  type="button"
-                  aoClicar={calcularCep}
-                />
-              </ContainerInputCep2>
-              {cepCalculado && (
-                <TextoCepCalculado>FRETE GRÁTIS</TextoCepCalculado>
-              )}
-            </ContainerCep2>
+            <Form ref={formCepRef} onSubmit={calcularCep}>
+              <ContainerCep2>
+                <TextoSecundario>Calcule o frete</TextoSecundario>
+                <ContainerInputCep2>
+                  <CampoTexto name="cep" label="Digite seu cep" type="number" />
+                  <Botao
+                    corDeFundo={colors.primaria}
+                    corDeFundoHover={colors.primariaClara}
+                    mostrarBoxShadow={true}
+                    corTexto={colors.branco}
+                    fontFamily={fonte}
+                    fontSize={10}
+                    fontWeight={600}
+                    flexGrow={1}
+                    flexBasis={120}
+                    width="100%"
+                    height={40}
+                    tamanho="small"
+                    variante="contained"
+                    texto="Calcular"
+                    type="submit"
+                  />
+                </ContainerInputCep2>
+                {cepCalculado && (
+                  <TextoCepCalculado>FRETE GRÁTIS</TextoCepCalculado>
+                )}
+              </ContainerCep2>
+            </Form>
           </main>
         </LayoutBase>
       )}

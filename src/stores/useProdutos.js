@@ -1,6 +1,5 @@
-// Em useCliente.js
 import { create } from "zustand";
-import { fetchProdutos } from "../../services/Produtos";
+import { fetchProdutos } from "../services/Produtos";
 
 const useProduto = create((set) => ({
   produtos: [],

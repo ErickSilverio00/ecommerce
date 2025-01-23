@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { initMercadoPago, Wallet } from "@mercadopago/sdk-react";
+import { useMediaQuery } from "@mui/material";
 import {
   CheckCircle,
   CreditCard,
@@ -14,13 +15,13 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Botao from "../../components/Botao";
 import CampoTexto from "../../components/CampoTexto";
-import useCarrinho from "../../hooks/Carrinho/useCarrinho";
-import useAuthStore from "../../hooks/FluxoDeAutenticacao/useAuthStore";
 import { criarSessaoCheckout } from "../../services/Carrinho";
 import {
   atualizarEnderecoEcommerce,
   fetchClientePorId,
 } from "../../services/Clientes";
+import useAuthStore from "../../stores/useAuthStore";
+import useCarrinho from "../../stores/useCarrinho";
 import { colors } from "../../styles/colors";
 import { fonte } from "../../styles/global";
 import LayoutBase from "../../templates/LayoutBase";
@@ -89,6 +90,7 @@ import {
 const token = process.env.REACT_APP_MERCADO_PAGO_PUBLIC_KEY;
 
 export default function Carrinho() {
+  const firstMediaQuery = useMediaQuery("(max-width: 672px)");
   const { user } = useAuthStore();
   const carrinho = useCarrinho();
   const navigate = useNavigate();
@@ -699,10 +701,10 @@ export default function Carrinho() {
           {carrinho.itensCarrinho.length === 0 && (
             <ContainerCarrinhoVazio>
               <TextoTituloCarrinhoVazio>
-                O seu carrinho está vazio!
+                O seu carrinho está vazio
               </TextoTituloCarrinhoVazio>
               <TextoDescricaoCarrinhoVazio>
-                Deseja olhar outros produtos?
+                Adquira nossos melhores produtos!
               </TextoDescricaoCarrinhoVazio>
               <Botao
                 corDeFundo={colors.primaria}
@@ -714,7 +716,7 @@ export default function Carrinho() {
                 fontWeight={600}
                 flexGrow={1}
                 flexBasis={40}
-                width="55%"
+                width={firstMediaQuery ? "75%" : "55%"}
                 height={40}
                 tamanho="small"
                 variante="contained"

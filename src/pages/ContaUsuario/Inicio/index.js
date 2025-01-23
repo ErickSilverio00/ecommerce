@@ -39,7 +39,7 @@ import {
   ContainerEndereco,
 } from "./styles";
 import { useMediaQuery, IconButton } from "@mui/material";
-import useAuthStore from "../../../hooks/FluxoDeAutenticacao/useAuthStore";
+import useAuthStore from "../../../stores/useAuthStore";
 import { buscarComprasCliente } from "../../../services/PagamentoEcommerce";
 import { formatarData, formatarMoeda } from "../../../utils/funcoes";
 import { toast } from "react-toastify";

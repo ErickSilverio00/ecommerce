@@ -1,7 +1,7 @@
 import { jwtDecode } from "jwt-decode";
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import useAuthStore from "../../../hooks/FluxoDeAutenticacao/useAuthStore";
+import useAuthStore from "../../../stores/useAuthStore";
 import { makeValidation } from "../../../utils/funcoes";
 import validationSchema from "./schema";
 

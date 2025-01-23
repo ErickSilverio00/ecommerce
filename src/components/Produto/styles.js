@@ -1,10 +1,11 @@
 import styled from "styled-components";
 import { colors } from "../../styles/colors";
 import { fonte } from "../../styles/global";
+
 export const ContainerProduct = styled.div`
   display: flex;
   flex-direction: column;
-  min-width: 220px;
+  min-width: 250px;
   height: min-content;
   flex: 1;
   padding: 20px;
@@ -13,7 +14,7 @@ export const ContainerProduct = styled.div`
   position: relative;
 
   @media (max-width: 500px) {
-    min-width: 150px;
+    min-width: 180px;
   }
 `;
 

@@ -100,7 +100,7 @@ export const ContainerProdutos = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
-  max-width: 100%;
+  width: 100%;
   height: min-content;
 `;
 

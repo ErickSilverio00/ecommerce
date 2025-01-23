@@ -308,16 +308,16 @@ export const ContainerVoltarDrawer = styled.div`
   gap: 10px;
   width: 100%;
   cursor: pointer;
-  padding-bottom: 10px;
+  padding: 0px 10px 10px 10px;
   border-bottom: 1px solid ${colors.cinzaSuperClaro};
 `;
 
 export const ContainerItem = styled.div`
   display: flex;
-  width: max-content;
+  width: 100%;
   align-items: center;
   gap: 10px;
-  padding-block: 20px;
+  padding: 20px 10px;
   cursor: pointer;
 `;
 

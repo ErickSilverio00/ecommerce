@@ -44,12 +44,12 @@ import {
   TextoContadorItens,
   ContainerFooterMenu,
 } from "./styles";
-import useProduto from "../../hooks/Produtos/useProduto";
+import useProdutos from "../../stores/useProdutos";
 import Drawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
-import useAuthStore from "../../hooks/FluxoDeAutenticacao/useAuthStore";
-import useCarrinho from "../../hooks/Carrinho/useCarrinho";
-import useProdutosCurtidos from "../../hooks/ProdutosCurtidos/useProdutosCurtidos";
+import useAuthStore from "../../stores/useAuthStore";
+import useCarrinho from "../../stores/useCarrinho";
+import useProdutosCurtidos from "../../stores/useProdutosCurtidos";
 import { colors } from "../../styles/colors";
 
 export default function Header() {
@@ -65,7 +65,7 @@ export default function Header() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const searchContainerRef = useRef(null);
   const inputRef = useRef(null);
-  const { produtos, buscarProdutos } = useProduto();
+  const { produtos, buscarProdutos } = useProdutos();
   const carrinho = useCarrinho();
   const produtosCurtidos = useProdutosCurtidos();
 
@@ -469,7 +469,7 @@ export default function Header() {
                 onClose={toggleDrawer(false)}
                 style={{ zIndex: 9999999 }}
               >
-                <List style={{ width: 280, paddingInline: 10, height: "100%" }}>
+                <List style={{ width: 280, height: "100%" }}>
                   <ContainerVoltarDrawer onClick={() => setDrawerOpen(false)}>
                     <ArrowLeft size={24} />
                     <TextoItens>VOLTAR</TextoItens>

@@ -13,13 +13,13 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Botao from "../../../components/Botao";
 import CampoTexto from "../../../components/CampoTexto";
-import useAuthStore from "../../../hooks/FluxoDeAutenticacao/useAuthStore";
 import {
   atualizarDadosCadastraisEcommerce,
   atualizarEnderecoEcommerce,
   deleteCliente,
   fetchClientePorId,
 } from "../../../services/Clientes";
+import useAuthStore from "../../../stores/useAuthStore";
 import { colors } from "../../../styles/colors";
 import { fonte } from "../../../styles/global";
 import { formatarData } from "../../../utils/funcoes";

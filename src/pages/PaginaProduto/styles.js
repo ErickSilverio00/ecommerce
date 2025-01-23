@@ -274,9 +274,11 @@ export const ContainerBotoes = styled.div`
 
 export const ContainerBotaoAddCarrinho = styled.div`
   display: flex;
-  max-width: 28px;
-  max-height: 28px;
+  width: 40px;
+  height: 40px;
   padding: 6px;
+  justify-content: center;
+  align-items: center;
   border-radius: 4px;
   box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
     0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);

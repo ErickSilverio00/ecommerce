@@ -27,7 +27,7 @@ export const mockProdutos = [
     ],
   },
   {
-    id_produto: 3,
+    id_produto: 2,
     nome_produto: "Bermuda Linho",
     descricao_produto: "Bermuda de linho básica, ideal para o dia a dia.",
     preco_custo_produto: 60.0,
@@ -54,7 +54,7 @@ export const mockProdutos = [
   },
   // Categoria: Calçados
   {
-    id_produto: 4,
+    id_produto: 3,
     nome_produto: "Tênis Esportivo",
     descricao_produto: "Tênis confortável para práticas esportivas.",
     preco_custo_produto: 100.0,
@@ -77,10 +77,21 @@ export const mockProdutos = [
         codigo_de_barras_produto: "7894561230987",
         media_custo_produto_variacao: 100.0,
       },
+      {
+        id_variacao_produto: 103,
+        cor_variacao_produto: "Verde",
+        medida_variacao_produto: "40",
+        imagens_variacao_produto: [
+          "https://firebasestorage.googleapis.com/v0/b/matheus-calcados.appspot.com/o/imagens%2FAdias-Lite-Racer-Verde.jpeg?alt=media",
+        ],
+        qtd_disponivel_produto: 75,
+        codigo_de_barras_produto: "5432167890123",
+        media_custo_produto_variacao: 120.0,
+      },
     ],
   },
   {
-    id_produto: 5,
+    id_produto: 4,
     nome_produto: "Tênis Casual",
     descricao_produto: "Tênis leve e confortável para dias quentes.",
     preco_custo_produto: 30.0,
@@ -107,7 +118,7 @@ export const mockProdutos = [
   },
   // Categoria: Acessórios
   {
-    id_produto: 6,
+    id_produto: 5,
     nome_produto: "Bolsa Casual",
     descricao_produto: "Bolsa prática para o dia a dia.",
     preco_custo_produto: 50.0,
@@ -134,7 +145,7 @@ export const mockProdutos = [
     ],
   },
   {
-    id_produto: 7,
+    id_produto: 6,
     nome_produto: "Óculos de sol",
     descricao_produto: "Óculos de sol para o dia a dia",
     preco_custo_produto: 25.0,
@@ -161,7 +172,7 @@ export const mockProdutos = [
   },
   // Roupas
   {
-    id_produto: 1,
+    id_produto: 7,
     nome_produto: "Camiseta Básica",
     descricao_produto: "Camiseta de algodão 100% para uso casual.",
     preco_custo_produto: 20.0,
@@ -189,7 +200,7 @@ export const mockProdutos = [
     ],
   },
   {
-    id_produto: 2,
+    id_produto: 8,
     nome_produto: "Vestido Estampado",
     descricao_produto: "Vestido estampado perfeito para o verão.",
     preco_custo_produto: 35.0,
@@ -219,35 +230,7 @@ export const mockProdutos = [
 
   // Calçados
   {
-    id_produto: 3,
-    nome_produto: "Tênis Esportivo",
-    descricao_produto: "Tênis leve e confortável para caminhadas e corridas.",
-    preco_custo_produto: 120.0,
-    preco_venda_produto: 249.9,
-    categoria_produto: "Calçados",
-    subcategoria_produto: "Tênis",
-    genero_produto: "Unissex",
-    marca_produto: "Marca C",
-    data_compra_produto: "2024-02-10",
-    fornecedor: {
-      nome_fornecedor: "Fornecedor C",
-    },
-    variacoes: [
-      {
-        id_variacao_produto: 103,
-        cor_variacao_produto: "Verde",
-        medida_variacao_produto: "42",
-        imagens_variacao_produto: [
-          "https://firebasestorage.googleapis.com/v0/b/matheus-calcados.appspot.com/o/imagens%2FAdias-Lite-Racer-Verde.jpeg?alt=media",
-        ],
-        qtd_disponivel_produto: 75,
-        codigo_de_barras_produto: "5432167890123",
-        media_custo_produto_variacao: 120.0,
-      },
-    ],
-  },
-  {
-    id_produto: 4,
+    id_produto: 9,
     nome_produto: "Chinelo Casual",
     descricao_produto: "Chinelo confortável para uso diário.",
     preco_custo_produto: 15.0,
@@ -279,7 +262,7 @@ export const mockProdutos = [
 
   // Acessórios
   {
-    id_produto: 5,
+    id_produto: 10,
     nome_produto: "Bolsa de Couro",
     descricao_produto: "Bolsa elegante feita com couro legítimo.",
     preco_custo_produto: 150.0,
@@ -307,7 +290,7 @@ export const mockProdutos = [
     ],
   },
   {
-    id_produto: 6,
+    id_produto: 11,
     nome_produto: "Boné Trucker",
     descricao_produto: "Boné estilo trucker ajustável.",
     preco_custo_produto: 25.0,

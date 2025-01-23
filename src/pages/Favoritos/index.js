@@ -3,11 +3,10 @@ import { Heart } from "@phosphor-icons/react";
 import { useNavigate } from "react-router-dom";
 import Botao from "../../components/Botao";
 import Produto from "../../components/Produto";
-import useProdutosCurtidos from "../../hooks/ProdutosCurtidos/useProdutosCurtidos";
+import useProdutosCurtidos from "../../stores/useProdutosCurtidos";
 import { colors } from "../../styles/colors";
 import { fonte } from "../../styles/global";
 import LayoutBase from "../../templates/LayoutBase";
-import { formatarMedidas, formatarMoeda } from "../../utils/funcoes";
 import {
   ContainerCarrinhoVazio,
   TextoDescricaoCarrinhoVazio,
@@ -36,20 +35,8 @@ export default function Favoritos() {
                 <Titulo>Favoritos</Titulo>
               </ContainerTitulo>
               <ContainerProdutosFavoritos>
-                {produtosCurtidos.produtosCurtidos.map((item) => (
-                  <Produto
-                    key={item.id_produto}
-                    idProduto={item.id_produto}
-                    image={item.variacoes[0].imagens_variacao_produto[0]}
-                    name={item.nome_produto}
-                    price={formatarMoeda(item.preco_venda_produto)}
-                    size={formatarMedidas(
-                      item.variacoes.map(
-                        (variacao) => variacao.medida_variacao_produto
-                      )
-                    )}
-                    flex={firstMediaQuery ? 1 : 0.2}
-                  />
+                {produtosCurtidos.produtosCurtidos.map((produto) => (
+                  <Produto produto={produto} flex={firstMediaQuery ? 1 : 0.2} />
                 ))}
               </ContainerProdutosFavoritos>
             </>
@@ -57,10 +44,10 @@ export default function Favoritos() {
           {produtosCurtidos.produtosCurtidos.length === 0 && (
             <ContainerCarrinhoVazio>
               <TextoTituloCarrinhoVazio>
-                Você ainda não curtiu nenhum produto!
+                Você ainda não curtiu nenhum produto
               </TextoTituloCarrinhoVazio>
               <TextoDescricaoCarrinhoVazio>
-                Deseja olhar outros produtos?
+                Adquira nossos melhores produtos!
               </TextoDescricaoCarrinhoVazio>
               <Botao
                 corDeFundo={colors.primaria}
@@ -72,7 +59,7 @@ export default function Favoritos() {
                 fontWeight={600}
                 flexGrow={1}
                 flexBasis={40}
-                width="55%"
+                width={firstMediaQuery ? "75%" : "55%"}
                 height={40}
                 tamanho="small"
                 variante="contained"

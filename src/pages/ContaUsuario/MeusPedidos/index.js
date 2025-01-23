@@ -32,7 +32,7 @@ import {
   TituloNaoTevePedido,
 } from "./styles";
 import { buscarComprasCliente } from "../../../services/PagamentoEcommerce";
-import useAuthStore from "../../../hooks/FluxoDeAutenticacao/useAuthStore";
+import useAuthStore from "../../../stores/useAuthStore";
 import { formatarData, formatarMoeda } from "../../../utils/funcoes";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";

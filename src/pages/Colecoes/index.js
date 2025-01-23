@@ -12,7 +12,6 @@ import TituloSubtituloSecoes from "../../components/TituloSubtituloSecoes";
 import { fetchProdutos } from "../../services/Produtos";
 import { colors } from "../../styles/colors";
 import LayoutBase from "../../templates/LayoutBase";
-import { formatarMedidas, formatarMoeda } from "../../utils/funcoes";
 import {
   ContainerBlocoProdutos,
   ContainerImagem,
@@ -190,7 +189,7 @@ export default function Colecoes() {
               width: firstMediaQuery ? "89%" : "97%",
               paddingTop: 10,
               paddingBottom: 15,
-              paddingInline: 20,
+              paddingLeft: 1,
             }}
             breakpoints={{
               320: { slidesPerView: 1 },
@@ -209,17 +208,7 @@ export default function Colecoes() {
           >
             {ultimosProdutos.map((produto, index) => (
               <SwiperSlide key={index}>
-                <Produto
-                  idProduto={produto.id_produto}
-                  image={produto.variacoes[0].imagens_variacao_produto[0]}
-                  name={produto.nome_produto}
-                  size={formatarMedidas(
-                    produto.variacoes.map(
-                      (variacao) => variacao.medida_variacao_produto
-                    )
-                  )}
-                  price={formatarMoeda(produto.preco_venda_produto)}
-                />
+                <Produto produto={produto} />
               </SwiperSlide>
             ))}
           </Swiper>
@@ -264,7 +253,7 @@ export default function Colecoes() {
               width: firstMediaQuery ? "89%" : "97%",
               paddingTop: 10,
               paddingBottom: 15,
-              paddingInline: 20,
+              paddingLeft: 1,
             }}
             breakpoints={{
               320: { slidesPerView: 1 },
@@ -285,17 +274,7 @@ export default function Colecoes() {
               (produto, index) =>
                 produto.genero_produto === "Feminino" && (
                   <SwiperSlide key={index}>
-                    <Produto
-                      idProduto={produto.id_produto}
-                      image={produto.variacoes[0].imagens_variacao_produto[0]}
-                      name={produto.nome_produto}
-                      size={formatarMedidas(
-                        produto.variacoes.map(
-                          (variacao) => variacao.medida_variacao_produto
-                        )
-                      )}
-                      price={formatarMoeda(produto.preco_venda_produto)}
-                    />
+                    <Produto produto={produto} />
                   </SwiperSlide>
                 )
             )}
@@ -343,7 +322,7 @@ export default function Colecoes() {
               width: firstMediaQuery ? "89%" : "97%",
               paddingTop: 10,
               paddingBottom: 15,
-              paddingInline: 20,
+              paddingLeft: 1,
             }}
             breakpoints={{
               320: { slidesPerView: 1 },
@@ -364,17 +343,7 @@ export default function Colecoes() {
               (produto, index) =>
                 produto.genero_produto === "Masculino" && (
                   <SwiperSlide key={index}>
-                    <Produto
-                      idProduto={produto.id_produto}
-                      image={produto.variacoes[0].imagens_variacao_produto[0]}
-                      name={produto.nome_produto}
-                      size={formatarMedidas(
-                        produto.variacoes.map(
-                          (variacao) => variacao.medida_variacao_produto
-                        )
-                      )}
-                      price={formatarMoeda(produto.preco_venda_produto)}
-                    />
+                    <Produto produto={produto} />
                   </SwiperSlide>
                 )
             )}
@@ -420,7 +389,7 @@ export default function Colecoes() {
               width: firstMediaQuery ? "89%" : "97%",
               paddingTop: 10,
               paddingBottom: 15,
-              paddingInline: 20,
+              paddingLeft: 1,
             }}
             breakpoints={{
               320: { slidesPerView: 1 },
@@ -441,17 +410,7 @@ export default function Colecoes() {
               (produto, index) =>
                 produto.categoria_produto === "Roupas" && (
                   <SwiperSlide key={index}>
-                    <Produto
-                      idProduto={produto.id_produto}
-                      image={produto.variacoes[0].imagens_variacao_produto[0]}
-                      name={produto.nome_produto}
-                      size={formatarMedidas(
-                        produto.variacoes.map(
-                          (variacao) => variacao.medida_variacao_produto
-                        )
-                      )}
-                      price={formatarMoeda(produto.preco_venda_produto)}
-                    />
+                    <Produto produto={produto} />
                   </SwiperSlide>
                 )
             )}
@@ -497,7 +456,7 @@ export default function Colecoes() {
               width: firstMediaQuery ? "89%" : "97%",
               paddingTop: 10,
               paddingBottom: 15,
-              paddingInline: 20,
+              paddingLeft: 1,
             }}
             breakpoints={{
               320: { slidesPerView: 1 },
@@ -518,17 +477,7 @@ export default function Colecoes() {
               (produto, index) =>
                 produto.categoria_produto === "Calçados" && (
                   <SwiperSlide key={index}>
-                    <Produto
-                      idProduto={produto.id_produto}
-                      image={produto.variacoes[0].imagens_variacao_produto[0]}
-                      name={produto.nome_produto}
-                      size={formatarMedidas(
-                        produto.variacoes.map(
-                          (variacao) => variacao.medida_variacao_produto
-                        )
-                      )}
-                      price={formatarMoeda(produto.preco_venda_produto)}
-                    />
+                    <Produto produto={produto} />
                   </SwiperSlide>
                 )
             )}
@@ -578,7 +527,7 @@ export default function Colecoes() {
               width: firstMediaQuery ? "89%" : "97%",
               paddingTop: 10,
               paddingBottom: 15,
-              paddingInline: 20,
+              paddingLeft: 1,
             }}
             breakpoints={{
               320: { slidesPerView: 1 },
@@ -599,17 +548,7 @@ export default function Colecoes() {
               (produto, index) =>
                 produto.categoria_produto === "Acessórios" && (
                   <SwiperSlide key={index}>
-                    <Produto
-                      idProduto={produto.id_produto}
-                      image={produto.variacoes[0].imagens_variacao_produto[0]}
-                      name={produto.nome_produto}
-                      size={formatarMedidas(
-                        produto.variacoes.map(
-                          (variacao) => variacao.medida_variacao_produto
-                        )
-                      )}
-                      price={formatarMoeda(produto.preco_venda_produto)}
-                    />
+                    <Produto produto={produto} />
                   </SwiperSlide>
                 )
             )}

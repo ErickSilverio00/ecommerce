@@ -14,7 +14,6 @@ import TituloSubtituloSecoes from "../../components/TituloSubtituloSecoes";
 import { fetchProdutos } from "../../services/Produtos";
 import { colors } from "../../styles/colors";
 import LayoutBase from "../../templates/LayoutBase";
-import { formatarMedidas, formatarMoeda } from "../../utils/funcoes";
 import {
   CheckboxCategoria,
   CheckboxCor,
@@ -144,7 +143,9 @@ export default function LayoutPaginaProdutos({
 
         if (temImagemFundo) {
           const produtosFiltrados = produtos.filter(
-            (produto) => produto.categoria_produto === tituloSecao
+            (produto) =>
+              produto.categoria_produto === tituloSecao ||
+              produto.genero_produto === tituloSecao
           );
           setProdutosDisponiveis(produtosFiltrados);
         } else {
@@ -461,49 +462,11 @@ export default function LayoutPaginaProdutos({
                         {checkboxesSelecionados
                           ? produtosFiltrados.map(
                               (produto) =>
-                                produto && (
-                                  <Produto
-                                    idProduto={produto.id_produto}
-                                    key={produto.id}
-                                    image={
-                                      produto.variacoes[0]
-                                        .imagens_variacao_produto[0]
-                                    }
-                                    name={produto.nome_produto}
-                                    size={formatarMedidas(
-                                      produto.variacoes.map(
-                                        (variacao) =>
-                                          variacao.medida_variacao_produto
-                                      )
-                                    )}
-                                    price={formatarMoeda(
-                                      produto.preco_venda_produto
-                                    )}
-                                  />
-                                )
+                                produto && <Produto produto={produto} />
                             )
                           : produtosDisponiveis.map(
                               (produto) =>
-                                produto && (
-                                  <Produto
-                                    idProduto={produto.id_produto}
-                                    key={produto.id}
-                                    image={
-                                      produto.variacoes[0]
-                                        .imagens_variacao_produto[0]
-                                    }
-                                    name={produto.nome_produto}
-                                    size={formatarMedidas(
-                                      produto.variacoes.map(
-                                        (variacao) =>
-                                          variacao.medida_variacao_produto
-                                      )
-                                    )}
-                                    price={formatarMoeda(
-                                      produto.preco_venda_produto
-                                    )}
-                                  />
-                                )
+                                produto && <Produto produto={produto} />
                             )}
                       </>
                     )}
