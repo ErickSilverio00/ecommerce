@@ -1,5 +1,4 @@
 import styled, { createGlobalStyle } from "styled-components";
-import { device } from "./mediaQuery";
 
 export default createGlobalStyle`
   * {
@@ -61,14 +60,6 @@ export const BoxItems = styled.div.withConfig({
   gap: ${(props) => props.gap ?? "10px"};
   box-shadow: ${(props) =>
     props.useBoxShadow ? "0px 0px 10px 0px rgba(0, 0, 0, 0.1)" : "none"};
-
-  @media ${device.laptop} {
-    width: ${(props) => props.wd}%;
-  }
-
-  @media ${device.laptopL} {
-    width: ${(props) => props.wd}%;
-  }
 `;
 
 export const AreaItem = styled.div.withConfig({
@@ -119,20 +110,4 @@ export const AreaItem = styled.div.withConfig({
   height: ${({ hg }) => hg ?? "unset"};
   box-shadow: ${(props) =>
     props.useBoxShadow ? "0px 0px 10px 0px rgba(0, 0, 0, 0.1)" : "none"};
-
-  @media ${device.mobileS} {
-    width: ${(props) => (props.wdr ? `${props.wdr}%` : "100%")};
-  }
-
-  @media ${device.tablet} {
-    width: ${(props) => (props.wdr ? `${props.wdr}%` : "100%")};
-  }
-
-  @media ${device.laptop} {
-    width: ${(props) => props.wd}%;
-  }
-
-  @media ${device.laptopL} {
-    width: ${(props) => props.wd}%;
-  }
 `;
