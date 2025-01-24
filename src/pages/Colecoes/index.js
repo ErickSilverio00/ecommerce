@@ -50,7 +50,7 @@ export default function Colecoes() {
                   color: arrowStates[key]?.left ? colors.branco : colors.cinza,
                 }}
               >
-                <CaretLeft size={24} weight="bold" />
+                <CaretLeft size={20} weight="bold" />
               </SetaEsquerda>
               <SetaDireita
                 onClick={() => swiperRefs.current[key]?.slideNext()}
@@ -61,7 +61,7 @@ export default function Colecoes() {
                   color: arrowStates[key]?.right ? colors.branco : colors.cinza,
                 }}
               >
-                <CaretRight size={24} weight="bold" />
+                <CaretRight size={20} weight="bold" />
               </SetaDireita>
             </ContainerSetas>
           </ContainerPrimeiraLinha>

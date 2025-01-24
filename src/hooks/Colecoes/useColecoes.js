@@ -11,6 +11,7 @@ const sections = [
   { key: "calcados", title: "Calçados", subTitle: "PROMOÇÕES" },
   { key: "acessorios", title: "Acessórios", subTitle: "PROMOÇÕES" },
 ];
+
 export default function useColecoes() {
   const swiperRefs = useRef({});
   const [produtosPorSecao, setProdutosPorSecao] = useState({});
@@ -25,7 +26,6 @@ export default function useColecoes() {
     try {
       const produtos = await fetchProdutos();
       const produtosFiltradosPorSecao = {};
-
       const currentYear = new Date().getFullYear();
 
       sections.forEach((section) => {
@@ -69,7 +69,10 @@ export default function useColecoes() {
     }
   }
 
-  const handleArrowState = (section, isEnd, isBeginning) => {
+  const updateArrowState = (section, swiper) => {
+    const isBeginning = swiper.isBeginning;
+    const isEnd = swiper.isEnd;
+
     setArrowStates((prevState) => ({
       ...prevState,
       [section]: {
@@ -80,19 +83,30 @@ export default function useColecoes() {
   };
 
   useEffect(() => {
-    loadProducts();
-  }, []);
+    const swiperInstances = swiperRefs.current;
 
-  useEffect(() => {
-    Object.keys(swiperRefs.current).forEach((section) => {
-      const swiper = swiperRefs.current[section];
+    Object.keys(swiperInstances).forEach((section) => {
+      const swiper = swiperInstances[section];
       if (swiper) {
-        swiper.on("reachEnd", () => handleArrowState(section, true, false));
-        swiper.on("reachBeginning", () =>
-          handleArrowState(section, false, true)
-        );
+        const onSlideChange = () => updateArrowState(section, swiper);
+
+        swiper.on("slideChange", onSlideChange);
+        swiper.on("reachEnd", () => updateArrowState(section, swiper));
+        swiper.on("reachBeginning", () => updateArrowState(section, swiper));
+
+        updateArrowState(section, swiper);
+
+        return () => {
+          swiper.off("slideChange", onSlideChange);
+          swiper.off("reachEnd", () => updateArrowState(section, swiper));
+          swiper.off("reachBeginning", () => updateArrowState(section, swiper));
+        };
       }
     });
+  }, [swiperRefs]);
+
+  useEffect(() => {
+    loadProducts();
   }, []);
 
   return {
@@ -101,7 +115,6 @@ export default function useColecoes() {
     arrowStates,
     swiperRefs,
     loadProducts,
-    handleArrowState,
     sections,
   };
 }

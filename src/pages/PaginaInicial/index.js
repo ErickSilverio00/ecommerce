@@ -138,7 +138,7 @@ export default function PaginaInicial() {
                 color: isLeftArrowRed ? colors.branco : colors.cinza,
               }}
             >
-              <CaretLeft size={24} weight="bold" />
+              <CaretLeft size={20} weight="bold" />
             </SetaEsquerda>
             <SetaDireita
               onClick={() => {
@@ -152,7 +152,7 @@ export default function PaginaInicial() {
                 color: isRightArrowRed ? colors.branco : colors.cinza,
               }}
             >
-              <CaretRight size={24} weight="bold" />
+              <CaretRight size={20} weight="bold" />
             </SetaDireita>
           </ContainerSetas>
         </ContainerPrimeiraLinha>

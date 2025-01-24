@@ -65,7 +65,7 @@ export const ContainerPrimeiraLinha = styled.div`
 
 export const ContainerSetas = styled.div`
   display: flex;
-  gap: 20px;
+  gap: 15px;
   align-items: center;
 `;
 
