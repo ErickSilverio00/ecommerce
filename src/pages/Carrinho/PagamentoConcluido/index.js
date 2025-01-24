@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {
   CheckCircle,
   CreditCard,
@@ -6,9 +7,10 @@ import {
 } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import Botao from "../../../components/Botao";
-import useAuthStore from "../../../stores/useAuthStore";
 import { buscarComprasCliente } from "../../../services/PagamentoEcommerce";
+import useAuthStore from "../../../stores/useAuthStore";
 import { colors } from "../../../styles/colors";
 import { fonte } from "../../../styles/global";
 import LayoutBase from "../../../templates/LayoutBase";
@@ -59,13 +61,12 @@ export default function PagamentoConcluido() {
       const response = await buscarComprasCliente(user.idCliente);
       setUltimaCompra(response.informacoesVendas[0]);
     } catch (error) {
-      console.error(error);
+      toast.error(error);
     }
   };
 
   useEffect(() => {
     buscarCompras();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

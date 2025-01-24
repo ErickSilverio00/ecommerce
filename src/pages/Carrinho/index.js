@@ -9,21 +9,18 @@ import {
   ShoppingCart,
   X,
 } from "@phosphor-icons/react";
-import { useEffect, useState } from "react";
+import { Form } from "@unform/web";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Botao from "../../components/Botao";
 import CampoTexto from "../../components/CampoTexto";
 import { criarSessaoCheckout } from "../../services/Carrinho";
-import {
-  atualizarEnderecoEcommerce,
-  fetchClientePorId,
-} from "../../services/Clientes";
 import useAuthStore from "../../stores/useAuthStore";
 import useCarrinho from "../../stores/useCarrinho";
 import { colors } from "../../styles/colors";
-import { fonte } from "../../styles/global";
+import { AreaItem, fonte } from "../../styles/global";
 import LayoutBase from "../../templates/LayoutBase";
 import { formatarMoeda } from "../../utils/funcoes";
 import {
@@ -37,7 +34,6 @@ import {
   ContainerEnderecoResumo,
   ContainerEsquerdaDireita,
   ContainerEsquerdo,
-  ContainerFormularioEdicaoEndereco,
   ContainerImagemCarrinho,
   ContainerImagemResumo,
   ContainerInfo,
@@ -53,7 +49,6 @@ import {
   ContainerItemPagamento,
   ContainerItemResumo,
   ContainerItensCarrinho,
-  ContainerNaoTemEndereco,
   ContainerNavegacaoPagamento,
   ContainerResumo,
   ContainerResumoDados,
@@ -65,7 +60,6 @@ import {
   ContainerTituloEndereco,
   ContainerTotal,
   CorETamanho,
-  DescricaoNaoTemEndereco,
   ImagemCarrinho,
   LinhaPagamento,
   NomeIitem,
@@ -81,7 +75,6 @@ import {
   TextoTotal,
   TituloCarrinho,
   TituloEnderecoResumo,
-  TituloNaoTemEndereco,
   TituloResumo,
   ValorInfo,
   ValorTotal,
@@ -94,100 +87,76 @@ export default function Carrinho() {
   const { user } = useAuthStore();
   const carrinho = useCarrinho();
   const navigate = useNavigate();
-  const [cliente, setCliente] = useState("");
+  const formEnderecoRef = useRef(null);
   const [preferenceId, setPreferenceId] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [rua, setRua] = useState("");
-  const [ruaErro, setRuaErro] = useState("");
-  const [complemento, setComplemento] = useState("");
-  const [complementoErro, setComplementoErro] = useState("");
-  const [bairro, setBairro] = useState("");
-  const [bairroErro, setBairroErro] = useState("");
-  const [cep, setCep] = useState("");
-  const [cepErro, setCepErro] = useState("");
-  const [cidade, setCidade] = useState("");
-  const [cidadeErro, setCidadeErro] = useState("");
   const [etapaCarrinho, setEtapaCarrinho] = useState(true);
   const [etapaPagamento, setEtapaPagamento] = useState(false);
   const [edicaoEnderecoAtiva, setEdicaoEnderecoAtiva] = useState(false);
-  const [naoTemEndereco, setNaoTemEndereco] = useState(false);
 
-  const buscarDadosCliente = async () => {
-    try {
-      const response = await fetchClientePorId(user.idCliente);
-      setCliente(response);
-      setRua(response.rua_cliente);
-      setComplemento(response.complemento_cliente);
-      setBairro(response.bairro_cliente);
-      setCep(response.cep_cliente);
-      setCidade(response.cidade_cliente);
-    } catch (error) {
-      console.error(error);
-    }
+  const aoMudarParaEdicaoEndereco = () => {
+    formEnderecoRef?.current?.setFieldValue("rua", user.endereco.rua);
+    formEnderecoRef?.current?.setFieldValue(
+      "complemento",
+      user.endereco.complemento
+    );
+    formEnderecoRef?.current?.setFieldValue("bairro", user.endereco.bairro);
+    formEnderecoRef?.current?.setFieldValue("cep", user.endereco.cep);
+    formEnderecoRef?.current?.setFieldValue("cidade", user.endereco.cidade);
+    setEdicaoEnderecoAtiva(true);
   };
 
-  const validarEndereco = async () => {
-    let temErro = false;
-
-    if (!rua.trim()) {
-      setRuaErro("A rua é obrigatória.");
-      temErro = true;
-    } else {
-      setRuaErro("");
+  const validarEndereco = async (formData) => {
+    if (formData.rua === "") {
+      formEnderecoRef.current.setFieldError("rua", "Campo Obrigatório");
+      return false;
     }
-    if (!complemento.trim()) {
-      setComplementoErro("O complemento é obrigatório.");
-      temErro = true;
-    } else {
-      setComplementoErro("");
+    if (formData.complemento === "") {
+      formEnderecoRef.current.setFieldError("complemento", "Campo Obrigatório");
+      return false;
     }
-    if (!bairro.trim()) {
-      setBairroErro("O setor é obrigatório.");
-      temErro = true;
-    } else {
-      setBairroErro("");
+    if (formData.bairro === "") {
+      formEnderecoRef.current.setFieldError("bairro", "Campo Obrigatório");
+      return false;
     }
-    if (!cep.trim()) {
-      setCepErro("O CEP é obrigatório.");
-      temErro = true;
-    } else {
-      setCepErro("");
+    if (formData.cep === "") {
+      formEnderecoRef.current.setFieldError("cep", "Campo Obrigatório");
+      return false;
     }
-    if (!cidade.trim()) {
-      setCidadeErro("A cidade é obrigatória.");
-      temErro = true;
-    } else {
-      setCidadeErro("");
+    if (formData.cidade === "") {
+      formEnderecoRef.current.setFieldError("cidade", "Campo Obrigatório");
+      return false;
     }
 
-    return temErro;
+    return true;
   };
 
-  const atualizarEndereco = async (event) => {
-    event.preventDefault();
-    const enderecoValido = await validarEndereco();
+  const atualizarEndereco = async () => {
+    const formData = formEnderecoRef?.current?.getData();
+    const enderecoValido = await validarEndereco(formData);
     if (enderecoValido) {
       return;
     }
+
     try {
       const params = {
         id_cliente: user.idCliente,
-        rua: rua,
-        complemento: complemento,
-        bairro: bairro,
-        cep: cep,
-        cidade: cidade,
+        rua: formData.rua,
+        complemento: formData.complemento,
+        bairro: formData.bairro,
+        cep: formData.cep,
+        cidade: formData.cidade,
       };
 
-      const response = await atualizarEnderecoEcommerce(
-        params.id_cliente,
-        params
-      );
-      if (response.mensagem === "Endereço atualizado com sucesso") {
-        buscarDadosCliente();
-        toast.success("Seu endereço foi atualizado com sucesso.");
-        setEdicaoEnderecoAtiva(false);
-      }
+      // const response = await atualizarEnderecoEcommerce(
+      //   params.id_cliente,
+      //   params
+      // );
+      // if (response.mensagem === "Endereço atualizado com sucesso") {
+      //   buscarDadosCliente();
+      //   toast.success("Seu endereço foi atualizado com sucesso.");
+      //   setEdicaoEnderecoAtiva(false);
+      // }
     } catch (error) {
       toast.error(`Erro ao atualizar seu endereço, tente novamente.`);
     }
@@ -198,7 +167,7 @@ export default function Carrinho() {
       setIsLoading(true);
       carrinho.removerItemCarrinho(item);
     } catch (error) {
-      console.error(error);
+      toast.error(error);
     } finally {
       setIsLoading(false);
     }
@@ -212,19 +181,15 @@ export default function Carrinho() {
       );
       carrinho.fetchItensCarrinho(user.idCliente);
     } catch (error) {
-      console.error("Erro ao alterar a quantidade do produto: ", error);
+      toast.error(`Erro ao alterar a quantidade do produto: ${error}`);
     }
   };
 
   const irParaPagamento = async () => {
-    if (naoTemEndereco) {
-      toast.error("Você deve ter um endereço cadastrado para prosseguir");
-      return;
-    }
     try {
       const objetoEnvio = {
         carrinho: carrinho.itensCarrinho,
-        cliente: cliente,
+        cliente: user.idCliente,
       };
       setIsLoading(true);
       const url = await criarSessaoCheckout(objetoEnvio);
@@ -233,37 +198,17 @@ export default function Carrinho() {
       setEtapaCarrinho(false);
       setIsLoading(false);
     } catch (error) {
-      console.error("Erro ao criar sessão de checkout: ", error);
-      toast.error("Erro ao iniciar o processo de pagamento");
+      toast.error(`Erro ao criar sessão de checkout: ${error}`);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    buscarDadosCliente();
     initMercadoPago(`${token}`, {
       locale: "pt-BR",
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useEffect(() => {
-    if (
-      (rua === "" &&
-        complemento === "" &&
-        bairro === "" &&
-        cep === "" &&
-        cidade === "") ||
-      (rua === null &&
-        complemento === null &&
-        bairro === null &&
-        cep === null &&
-        cidade === null)
-    ) {
-      setNaoTemEndereco(true);
-    } else {
-      setNaoTemEndereco(false);
-    }
-  }, [rua, complemento, bairro, cep, cidade, naoTemEndereco]);
 
   return (
     <LayoutBase>
@@ -335,155 +280,72 @@ export default function Carrinho() {
                           color={colors.preto2}
                         />
                       </ContainerTituloEndereco>
-                      {!edicaoEnderecoAtiva && !naoTemEndereco && (
+                      {!edicaoEnderecoAtiva && (
                         <ContainerEnderecoCadastrado>
-                          <TextosEnderecos>Rua: {rua}</TextosEnderecos>
                           <TextosEnderecos>
-                            Complemento: {complemento}
+                            Rua: {user?.endereco?.rua}
                           </TextosEnderecos>
-                          <TextosEnderecos>Setor: {bairro}</TextosEnderecos>
                           <TextosEnderecos>
-                            CEP: {cep} - {cidade}
+                            Complemento: {user?.endereco?.complemento}
+                          </TextosEnderecos>
+                          <TextosEnderecos>
+                            Setor: {user?.endereco?.bairro}
+                          </TextosEnderecos>
+                          <TextosEnderecos>
+                            CEP: {user?.endereco?.cep} -{" "}
+                            {user?.endereco?.cidade}
                           </TextosEnderecos>
                           <TextoEditarEndereco
-                            onClick={() => setEdicaoEnderecoAtiva(true)}
+                            onClick={aoMudarParaEdicaoEndereco}
                           >
                             EDITAR
                           </TextoEditarEndereco>
                         </ContainerEnderecoCadastrado>
                       )}
-                      {naoTemEndereco && !edicaoEnderecoAtiva && (
-                        <ContainerNaoTemEndereco>
-                          <TituloNaoTemEndereco>
-                            Você não possui nenhum endereço cadastrado
-                          </TituloNaoTemEndereco>
-                          <DescricaoNaoTemEndereco>
-                            Cadastre seu endereço agora mesmo para receber seu
-                            pedido!
-                          </DescricaoNaoTemEndereco>
+                      <Form
+                        erf={formEnderecoRef}
+                        onSubmit={atualizarEndereco}
+                        style={{
+                          display: !edicaoEnderecoAtiva && "none",
+                        }}
+                      >
+                        <ContainerCamposEdicaoEndereco>
+                          <AreaItem wd="20">
+                            <CampoTexto name="rua" label="Rua" />
+                          </AreaItem>
+                          <AreaItem wd="40">
+                            <CampoTexto
+                              name="complemento"
+                              label="Complemento"
+                            />
+                          </AreaItem>
+                          <AreaItem wd="30">
+                            <CampoTexto name="setor" label="Setor" />
+                          </AreaItem>
+                          <AreaItem wd="20">
+                            <CampoTexto name="cep" label="CEP" />
+                          </AreaItem>
+                          <AreaItem wd="30">
+                            <CampoTexto name="cidade" label="Cidade" />
+                          </AreaItem>
+                        </ContainerCamposEdicaoEndereco>
+                        <ContainerBotoesEdicaoEndereco>
                           <Botao
-                            tipo="button"
+                            tipo="submit"
                             variante="contained"
                             tamanho="small"
-                            texto="Cadastrar endereço"
+                            texto="Salvar alterações"
                             mostrarBoxShadow={true}
-                            corDeFundo={colors.primaria}
-                            corDeFundoHover={colors.primariaClara}
+                            corDeFundo={colors.verde}
+                            corDeFundoHover={colors.verdeClaro}
                             fontFamily={fonte}
                             fontSize={10}
                             fontWeight="600"
-                            width="25%"
+                            width="49.25%"
                             height={36}
-                            aoClicar={() => setEdicaoEnderecoAtiva(true)}
                           />
-                        </ContainerNaoTemEndereco>
-                      )}
-                      {edicaoEnderecoAtiva && (
-                        <>
-                          <ContainerFormularioEdicaoEndereco
-                            onSubmit={atualizarEndereco}
-                          >
-                            <ContainerCamposEdicaoEndereco>
-                              <CampoTexto
-                                texto="Rua"
-                                variante="outlined"
-                                tamanho="small"
-                                fullWidth
-                                style={{ flexGrow: 1, flexBasis: 200 }}
-                                tipo="text"
-                                value={rua}
-                                aoMudar={(event) => {
-                                  const texto = event.target.value;
-                                  setRua(texto);
-                                  setRuaErro("");
-                                }}
-                                erro={ruaErro !== ""}
-                                textoDeAjuda={ruaErro}
-                              />
-                              <CampoTexto
-                                texto="Complemento"
-                                variante="outlined"
-                                tamanho="small"
-                                fullWidth
-                                style={{ flexGrow: 1, flexBasis: 200 }}
-                                tipo="text"
-                                value={complemento}
-                                aoMudar={(event) => {
-                                  const texto = event.target.value;
-                                  setComplemento(texto);
-                                  setComplementoErro("");
-                                }}
-                                erro={complementoErro !== ""}
-                                textoDeAjuda={complementoErro}
-                              />
-                              <CampoTexto
-                                texto="Setor"
-                                variante="outlined"
-                                tamanho="small"
-                                fullWidth
-                                style={{ flexGrow: 1, flexBasis: 200 }}
-                                tipo="text"
-                                value={bairro}
-                                aoMudar={(event) => {
-                                  const texto = event.target.value;
-                                  setBairro(texto);
-                                  setBairroErro("");
-                                }}
-                                erro={bairroErro !== ""}
-                                textoDeAjuda={bairroErro}
-                              />
-                              <CampoTexto
-                                texto="CEP"
-                                variante="outlined"
-                                tamanho="small"
-                                fullWidth
-                                style={{ flexGrow: 1, flexBasis: 200 }}
-                                tipo="text"
-                                mascara="99999-999"
-                                value={cep}
-                                aoMudar={(texto) => {
-                                  setCep(texto);
-                                  setCepErro("");
-                                }}
-                                erro={cepErro !== ""}
-                                textoDeAjuda={cepErro}
-                              />
-                              <CampoTexto
-                                texto="Cidade"
-                                variante="outlined"
-                                tamanho="small"
-                                fullWidth
-                                style={{ flexGrow: 1, flexBasis: 200 }}
-                                tipo="text"
-                                value={cidade}
-                                aoMudar={(event) => {
-                                  const texto = event.target.value;
-                                  setCidade(texto);
-                                  setCidadeErro("");
-                                }}
-                                erro={cidadeErro !== ""}
-                                textoDeAjuda={cidadeErro}
-                              />
-                            </ContainerCamposEdicaoEndereco>
-                            <ContainerBotoesEdicaoEndereco>
-                              <Botao
-                                tipo="submit"
-                                variante="contained"
-                                tamanho="small"
-                                texto="Salvar alterações"
-                                mostrarBoxShadow={true}
-                                corDeFundo={colors.verde}
-                                corDeFundoHover={colors.verdeClaro}
-                                fontFamily={fonte}
-                                fontSize={10}
-                                fontWeight="600"
-                                width="49.25%"
-                                height={36}
-                              />
-                            </ContainerBotoesEdicaoEndereco>
-                          </ContainerFormularioEdicaoEndereco>
-                        </>
-                      )}
+                        </ContainerBotoesEdicaoEndereco>
+                      </Form>
                     </ContainerEndereco>
 
                     <ContainerItensCarrinho>
@@ -495,6 +357,7 @@ export default function Carrinho() {
                           color={colors.preto2}
                         />
                       </ContainerTituloCarrinho>
+                      {console.log(user)}
                       {carrinho.itensCarrinho.map((item) => (
                         <ContainerItem>
                           <Link
@@ -646,16 +509,19 @@ export default function Carrinho() {
                           Endereço de entrega
                         </TituloEnderecoResumo>
                         <TextoEnderecoResumo>
-                          {rua}, {complemento}, {bairro}, {cidade}
+                          {user?.endereco?.rua}, {user?.endereco?.complemento},{" "}
+                          {user?.endereco?.bairro}, {user?.endereco?.cidade}
                         </TextoEnderecoResumo>
-                        <TextoEnderecoResumo>CEP: {cep}</TextoEnderecoResumo>
+                        <TextoEnderecoResumo>
+                          CEP: {user?.endereco?.cep}
+                        </TextoEnderecoResumo>
                       </ContainerEnderecoResumo>
                       <ContainerInfosValoresResumo>
                         <TituloEnderecoResumo>
                           Data estimada de entrega
                         </TituloEnderecoResumo>
                         <TextoEnderecoResumo>
-                          {cidade === "Goiânia" && (
+                          {user?.endereco?.cidade === "Goiânia" && (
                             <>
                               Receba seu pedido até dia{" "}
                               {new Date(
@@ -663,7 +529,7 @@ export default function Carrinho() {
                               ).toLocaleDateString()}
                             </>
                           )}
-                          {cidade !== "Goiânia" && (
+                          {user?.endereco?.cidade !== "Goiânia" && (
                             <>
                               Receba seu pedido até dia{" "}
                               {new Date(

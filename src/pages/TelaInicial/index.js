@@ -1,6 +1,7 @@
 import { useMediaQuery } from "@mui/material";
 import { CaretLeft, CaretRight } from "@phosphor-icons/react";
 import React, { useEffect, useRef, useState } from "react";
+import { toast } from "react-toastify";
 import "swiper/css";
 import "swiper/css/navigation";
 import { Autoplay, Navigation } from "swiper/modules";
@@ -45,7 +46,7 @@ export default function TelaInicial() {
       const produtos = await fetchProdutos();
       setProdutosDisponiveis(produtos);
     } catch (error) {
-      console.error(error);
+      toast.error(error);
     }
   }
 
@@ -109,25 +110,45 @@ export default function TelaInicial() {
         <ContainerApresentacoesCategorias>
           <ApresentacaoCategoria
             name="Calçados"
-            description="+ de 10 produtos"
+            description={`+ de ${
+              produtosDisponiveis.filter(
+                (produto) => produto.categoria_produto === "Calçados"
+              ).length
+            } produtos`}
             image={categoriaTenis}
             link="/calcados"
           />
           <ApresentacaoCategoria
             name="Feminino"
-            description="+ de 15 produtos"
+            description={`+ de ${
+              produtosDisponiveis.filter(
+                (produto) =>
+                  produto.genero_produto === "Feminino" ||
+                  produto.genero_produto === "Unissex"
+              ).length
+            } produtos`}
             image={categoriaFeminino}
             link="/feminino"
           />
           <ApresentacaoCategoria
             name="Masculino"
-            description="+ de 14 produtos"
+            description={`+ de ${
+              produtosDisponiveis.filter(
+                (produto) =>
+                  produto.genero_produto === "Masculino" ||
+                  produto.genero_produto === "Unissex"
+              ).length
+            } produtos`}
             image={categoriaMasculino}
             link="masculino"
           />
           <ApresentacaoCategoria
             name="Acessórios"
-            description="+ de 8 produtos"
+            description={`+ de ${
+              produtosDisponiveis.filter(
+                (produto) => produto.categoria_produto === "Acessórios"
+              ).length
+            } produtos`}
             image={categoriaAcessorios}
             link="/acessorios"
           />

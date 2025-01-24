@@ -29,8 +29,16 @@ export default function useCamposLogin() {
       const payload = btoa(
         JSON.stringify({
           email_cliente: formData.email,
-          userName: formData.email,
+          userName: "Seu nome",
           idCliente: "12345",
+          endereco: {
+            rua: "Rua Teste",
+            complemento: "Apto 101",
+            bairro: "Bairro dos Sonhos",
+            cep: "12345-678",
+            cidade: "Goiânia",
+            estado: "Goiás",
+          },
           exp: Math.floor(Date.now() / 1000) + 60 * 60,
         })
       );

@@ -13,12 +13,6 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Botao from "../../../components/Botao";
 import CampoTexto from "../../../components/CampoTexto";
-import {
-  atualizarDadosCadastraisEcommerce,
-  atualizarEnderecoEcommerce,
-  deleteCliente,
-  fetchClientePorId,
-} from "../../../services/Clientes";
 import useAuthStore from "../../../stores/useAuthStore";
 import { colors } from "../../../styles/colors";
 import { fonte } from "../../../styles/global";
@@ -83,17 +77,17 @@ export default function MeusDados({
 
   const buscarDadosCliente = async () => {
     try {
-      const response = await fetchClientePorId(user.idCliente);
-      setNomeCompleto(response.nome_cliente);
-      setTelefone(response.telefone_cliente);
-      setEmail(response.email_cliente);
-      setCpf(response.cpf_cliente);
-      setDataNascimento(formatarData(response.data_nascimento_cliente));
-      setRua(response.rua_cliente);
-      setComplemento(response.complemento_cliente);
-      setBairro(response.bairro_cliente);
-      setCep(response.cep_cliente);
-      setCidade(response.cidade_cliente);
+      // const response = await fetchClientePorId(user.idCliente);
+      // setNomeCompleto(response.nome_cliente);
+      // setTelefone(response.telefone_cliente);
+      // setEmail(response.email_cliente);
+      // setCpf(response.cpf_cliente);
+      // setDataNascimento(formatarData(response.data_nascimento_cliente));
+      // setRua(response.rua_cliente);
+      // setComplemento(response.complemento_cliente);
+      // setBairro(response.bairro_cliente);
+      // setCep(response.cep_cliente);
+      // setCidade(response.cidade_cliente);
     } catch (error) {
       console.error(error);
     }
@@ -134,14 +128,14 @@ export default function MeusDados({
         cpf: cpf,
       };
 
-      const response = await atualizarDadosCadastraisEcommerce(
-        params.id_cliente,
-        params
-      );
-      if (response.mensagem === "Cliente atualizado com sucesso") {
-        buscarDadosCliente();
-        toast.success("Seus dados foram atualizados com sucesso.");
-      }
+      // const response = await atualizarDadosCadastraisEcommerce(
+      //   params.id_cliente,
+      //   params
+      // );
+      // if (response.mensagem === "Cliente atualizado com sucesso") {
+      //   buscarDadosCliente();
+      //   toast.success("Seus dados foram atualizados com sucesso.");
+      // }
     } catch (error) {
       toast.error(`Erro ao atualizar seus dados cadastrais, tente novamente.`);
     }
@@ -226,15 +220,15 @@ export default function MeusDados({
         cidade: cidade,
       };
 
-      const response = await atualizarEnderecoEcommerce(
-        params.id_cliente,
-        params
-      );
-      if (response.mensagem === "Endereço atualizado com sucesso") {
-        buscarDadosCliente();
-        toast.success("Seu endereço foi atualizado com sucesso.");
-        setEdicaoEnderecoAtiva(false);
-      }
+      // const response = await atualizarEnderecoEcommerce(
+      //   params.id_cliente,
+      //   params
+      // );
+      // if (response.mensagem === "Endereço atualizado com sucesso") {
+      //   buscarDadosCliente();
+      //   toast.success("Seu endereço foi atualizado com sucesso.");
+      //   setEdicaoEnderecoAtiva(false);
+      // }
     } catch (error) {
       toast.error(`Erro ao atualizar seu endereço, tente novamente.`);
     }
@@ -251,11 +245,11 @@ export default function MeusDados({
 
   const excluirCliente = async () => {
     try {
-      const response = await deleteCliente(user.idCliente);
-      if (response.mensagem === "Cliente deletado com sucesso") {
-        logout();
-        window.location.reload();
-      }
+      // const response = await deleteCliente(user.idCliente);
+      // if (response.mensagem === "Cliente deletado com sucesso") {
+      //   logout();
+      //   window.location.reload();
+      // }
     } catch (error) {
       toast.error("Não foi possível excluir sua conta, tente novamente");
     }

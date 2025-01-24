@@ -333,8 +333,7 @@ export default function Header() {
               <UserCircle size={32} weight="bold" color={colors.branco} />
               {user && (
                 <TextLoginCadastro style={{ fontWeight: "bold" }}>
-                  {/* Olá, {user.userName.split(" ")[0]} <br></br> */}
-                  Olá, Erick <br></br>
+                  Olá, {user.userName} <br></br>
                   <Link
                     to="/minha-conta"
                     style={{

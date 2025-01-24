@@ -122,7 +122,7 @@ export const TextoEditarEndereco = styled.p`
   }
 `;
 
-export const ContainerFormularioEdicaoEndereco = styled.form`
+export const ContainerFormularioEdicaoEndereco = styled.div`
   display: flex;
   flex-direction: column;
 `;

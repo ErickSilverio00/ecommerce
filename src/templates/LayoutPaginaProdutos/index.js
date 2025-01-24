@@ -142,12 +142,31 @@ export default function LayoutPaginaProdutos({
         const produtos = await fetchProdutos();
 
         if (temImagemFundo) {
-          const produtosFiltrados = produtos.filter(
-            (produto) =>
-              produto.categoria_produto === tituloSecao ||
-              produto.genero_produto === tituloSecao
-          );
-          setProdutosDisponiveis(produtosFiltrados);
+          let novosProdutos;
+
+          if (
+            produtos.some(
+              (produto) => produto.categoria_produto === tituloSecao
+            )
+          ) {
+            novosProdutos = produtos.filter(
+              (produto) => produto.categoria_produto === tituloSecao
+            );
+          } else if (
+            produtos.some(
+              (produto) =>
+                produto.genero_produto === tituloSecao ||
+                produto.genero_produto === "Unissex"
+            )
+          ) {
+            novosProdutos = produtos.filter(
+              (produto) =>
+                produto.genero_produto === tituloSecao ||
+                produto.genero_produto === "Unissex"
+            );
+          }
+
+          setProdutosDisponiveis(novosProdutos);
         } else {
           const produtosEncontrados = produtos.filter((produto) => {
             const removeAccents = (str) => {

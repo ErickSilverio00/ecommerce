@@ -9,10 +9,10 @@ import { toast } from "react-toastify";
 import Botao from "../../components/Botao";
 import CampoTexto from "../../components/CampoTexto";
 import ImageMagnifier from "../../components/ImageMagnifier";
-import useCarrinho from "../../stores/useCarrinho";
-import useAuthStore from "../../stores/useAuthStore";
-import useProdutosCurtidos from "../../stores/useProdutosCurtidos";
 import { fetchProdutos } from "../../services/Produtos";
+import useAuthStore from "../../stores/useAuthStore";
+import useCarrinho from "../../stores/useCarrinho";
+import useProdutosCurtidos from "../../stores/useProdutosCurtidos";
 import { colors } from "../../styles/colors";
 import { fonte } from "../../styles/global";
 import LayoutBase from "../../templates/LayoutBase";
@@ -139,8 +139,13 @@ export default function PaginaProduto() {
 
       if (produtoSelecionado && corSelecionada && tamanhoSelecionado) {
         const carrinhoData = {
-          idCliente: user.idCliente,
-          idVariacaoProduto: variacaoSelecionada.id_variacao_produto,
+          id_produto: produtoSelecionado.id_produto,
+          nome_produto: produtoSelecionado.nome_produto,
+          descricao_produto: produtoSelecionado.descricao_produto,
+          categoria_produto: produtoSelecionado.categoria_produto,
+          marca_produto: produtoSelecionado.marca_produto,
+          preco_venda_produto: produtoSelecionado.preco_venda_produto,
+          ...variacaoSelecionada,
           quantidade: 1,
         };
         await carrinho.adicionarAoCarrinho(carrinhoData);
@@ -158,6 +163,8 @@ export default function PaginaProduto() {
   const handleAdicionarAoCarrinho = async () => {
     try {
       setIsLoading(true);
+
+      // Encontra a variação selecionada
       const variacaoSelecionada = produtoSelecionado.variacoes.find(
         (variacao) =>
           variacao.cor_variacao_produto === corSelecionada &&
@@ -188,13 +195,20 @@ export default function PaginaProduto() {
 
       if (produtoSelecionado && corSelecionada && tamanhoSelecionado) {
         const carrinhoData = {
-          idCliente: user.idCliente,
-          idVariacaoProduto: variacaoSelecionada.id_variacao_produto,
+          id_produto: produtoSelecionado.id_produto,
+          nome_produto: produtoSelecionado.nome_produto,
+          descricao_produto: produtoSelecionado.descricao_produto,
+          categoria_produto: produtoSelecionado.categoria_produto,
+          marca_produto: produtoSelecionado.marca_produto,
+          preco_venda_produto: produtoSelecionado.preco_venda_produto,
+          ...variacaoSelecionada,
           quantidade: 1,
         };
+
         await carrinho.adicionarAoCarrinho(carrinhoData);
       }
     } catch (error) {
+      toast.error("Ocorreu um erro ao adicionar o produto ao carrinho.");
       toast.error(error);
     } finally {
       setIsLoading(false);
