@@ -4,7 +4,6 @@ import { colors } from "../../styles/colors";
 export const ContainerImageMagnifier = styled.div`
   display: flex;
   position: relative;
-  z-index: 0;
 `;
 
 export const ContainerImgMagnifier = styled.img`

@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import { colors } from "../../styles/colors";
-import { fonte } from "../../styles/global";
+import { colors } from "../../../styles/colors";
+import { fonte } from "../../../styles/global";
 
 export const ContainerPrincipal = styled.div`
   display: flex;
@@ -49,7 +49,7 @@ export const ContainerBlocoProdutos = styled.div`
   flex-direction: column;
   gap: 20px;
   max-width: 100%;
-  margin: 20px;
+  margin: 20px 0px;
   &:last-child {
     margin-bottom: 40px;
   }
@@ -63,7 +63,7 @@ export const ContainerPrimeiraLinha = styled.div`
   padding-bottom: 20px;
   gap: 10px;
 
-  @media (max-width: 430px) {
+  @media (max-width: 620px) {
     flex-direction: column;
   }
 `;
@@ -74,7 +74,7 @@ export const ContainerFiltroOrdenacao = styled.div`
   gap: 20px;
   width: 320px;
 
-  @media (max-width: 430px) {
+  @media (max-width: 620px) {
     width: 100%;
   }
 `;
@@ -90,6 +90,7 @@ export const ContainerFiltros = styled.div`
   flex-direction: column;
   max-width: 280px;
   min-width: 280px;
+  border-right: 1px solid ${colors.cinzaSuperClaro};
 
   @media (max-width: 772px) {
     display: none;
@@ -128,10 +129,10 @@ export const ContainerFilrosSubcategorias = styled.div`
   }
 `;
 
-export const ContainerTituloFiltroCategorias = styled.div`
+export const ContainerTituloFiltro = styled.div`
   display: flex;
   justify-content: space-between;
-  cursor: pointer;
+  padding-right: 10px;
 
   .plus-color {
     transition: all 0.3s;
@@ -144,117 +145,40 @@ export const ContainerTituloFiltroCategorias = styled.div`
   }
 `;
 
-export const ContainerOpcoesCategorias = styled.div`
+export const ContainerOpcoes = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
 `;
 
-export const ContainerOpcaoCategoria = styled.div`
+export const ContainerOpcao = styled.div`
   display: flex;
   gap: 5px;
   align-items: center;
 `;
 
-export const CheckboxCategoria = styled.input`
+export const Checkbox = styled.input`
   display: flex;
   width: 20px;
   height: 20px;
   cursor: pointer;
 `;
 
-export const ContainerFiltrosCores = styled.div`
+export const ContainerFiltrosGerais = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
   padding-block: 20px;
   border-bottom: 1px solid ${colors.cinzaSuperClaro};
+  cursor: pointer;
+
+  &:first-child {
+    padding-top: 10px;
+  }
 
   @media (max-width: 772px) {
     width: 100%;
   }
-`;
-
-export const ContainerTituloFiltroCores = styled.div`
-  display: flex;
-  justify-content: space-between;
-  cursor: pointer;
-
-  .plus-color {
-    transition: all 0.3s;
-  }
-
-  &:hover {
-    .plus-color {
-      fill: ${colors.preto2};
-    }
-  }
-`;
-
-export const ContainerOpcoesCores = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-`;
-
-export const ContainerOpcaoCor = styled.div`
-  display: flex;
-  gap: 5px;
-  align-items: center;
-`;
-
-export const CheckboxCor = styled.input`
-  display: flex;
-  width: 20px;
-  height: 20px;
-  cursor: pointer;
-`;
-
-export const ContainerFiltrosTamanhos = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  padding-block: 20px;
-  border-bottom: 1px solid ${colors.cinzaSuperClaro};
-
-  @media (max-width: 772px) {
-    width: 100%;
-  }
-`;
-
-export const ContainerTituloFiltroTamanhos = styled.div`
-  display: flex;
-  justify-content: space-between;
-  cursor: pointer;
-
-  .plus-color {
-    transition: all 0.3s;
-  }
-
-  &:hover {
-    .plus-color {
-      fill: ${colors.preto2};
-    }
-  }
-`;
-
-export const ContainerOpcoesTamanhos = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-`;
-
-export const ContainerOpcaoTamanho = styled.div`
-  display: flex;
-  gap: 5px;
-  align-items: center;
-`;
-
-export const CheckboxTamanho = styled.input`
-  display: flex;
-  width: 20px;
-  height: 20px;
-  cursor: pointer;
 `;
 
 export const TextoCheckbox = styled.p`

@@ -35,7 +35,6 @@ export default function ImageMagnifier({ imgUrl, imgAlt }) {
             left: `${cursorPosition.x - 100}px`,
             top: `${cursorPosition.y - 100}px`,
             pointerEvents: "none",
-            zIndex: 9999999999999,
           }}
         >
           <ContainerMagnifierImg

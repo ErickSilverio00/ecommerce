@@ -7,7 +7,6 @@ export const ContainerCarrinho = styled.div`
   flex-direction: column;
   gap: 20px;
   margin-bottom: 40px;
-  margin-inline: 20px;
   margin-top: 130px;
 
   @media (max-width: 500px) {
@@ -63,11 +62,9 @@ export const ContainerEsquerdo = styled.div`
   display: flex;
   flex-direction: column;
   width: 70%;
-  margin-left: 20px;
 
   @media (max-width: 960px) {
     width: 100%;
-    margin-left: 0px;
   }
 `;
 
@@ -293,7 +290,6 @@ export const TextoQtde = styled.p`
 export const ContainerDireito = styled.div`
   display: flex;
   flex-direction: column;
-  margin-right: 20px;
   width: 30%;
   height: min-content;
   background-color: #f9fafb;
@@ -301,7 +297,6 @@ export const ContainerDireito = styled.div`
 
   @media (max-width: 960px) {
     width: 100%;
-    margin-left: 0px;
     text-align: center;
   }
 `;

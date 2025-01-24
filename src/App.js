@@ -6,6 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import useAuthStore from "./stores/useAuthStore";
 import Rotas from "./routes";
 import GlobalStyle from "./styles/global";
+import LayoutBase from "./templates/LayoutBase";
 
 function App() {
   const { login, logout } = useAuthStore();
@@ -33,9 +34,11 @@ function App() {
 
   return (
     <Router>
-      <Rotas />
-      <ToastContainer autoClose={3000} theme="light" position="top-center" />
-      <GlobalStyle />
+      <LayoutBase>
+        <Rotas />
+        <ToastContainer autoClose={3000} theme="light" position="top-center" />
+        <GlobalStyle />
+      </LayoutBase>
     </Router>
   );
 }

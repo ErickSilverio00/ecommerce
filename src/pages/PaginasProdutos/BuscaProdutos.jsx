@@ -1,6 +1,6 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import LayoutPaginaProdutos from "../../templates/LayoutPaginaProdutos";
+import LayoutPaginaProdutos from "./LayoutPaginasProdutos";
 
 export default function BuscaProdutos() {
   const { busca } = useParams();

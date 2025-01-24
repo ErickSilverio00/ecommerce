@@ -34,8 +34,7 @@ export default function Footer() {
   const formEmailRef = useRef(null);
   const navigate = useNavigate();
 
-  const enviarEmail = async (event) => {
-    event.preventDefault();
+  const enviarEmail = async () => {
     const email = formEmailRef?.current?.getFieldValue("email");
 
     try {
@@ -46,7 +45,7 @@ export default function Footer() {
       toast.success("E-mail cadastrado com sucesso");
       formEmailRef.current.reset();
     } catch (error) {
-      console.error(error);
+      toast.error(error);
     }
   };
 
@@ -99,10 +98,10 @@ export default function Footer() {
           <DefaultTitle>Cadastre-se</DefaultTitle>
           <ContainerInfos>
             <DefaultText2>Receba novidades e descontos exclusivos</DefaultText2>
-            <Form ref={formEmailRef}>
+            <Form ref={formEmailRef} onSubmit={enviarEmail}>
               <ContainerForm>
                 <CampoTexto name="email" label="Digite seu e-mail" />
-                <ContainerFormButton onClick={enviarEmail}>
+                <ContainerFormButton type="submit">
                   <EnvelopeSimple
                     size={24}
                     weight="bold"
@@ -115,7 +114,16 @@ export default function Footer() {
         </FourthColumn>
       </FirstLine>
       <LastLine>
-        <TextLastLine>© Desenvolvido por Erick Silvério</TextLastLine>
+        <TextLastLine>
+          © Desenvolvido por{" "}
+          <a
+            href="https://www.linkedin.com/in/erick-silv%C3%A9rio-024576248/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Erick Silvério
+          </a>
+        </TextLastLine>
       </LastLine>
     </ContainerFooter>
   );

@@ -1,31 +1,14 @@
 import React, { useState } from "react";
 import Header from "../../components/Header";
-import ItensDashboard from "../../components/ItensDashboard";
-import { ContainerConteudo, ContainerMain } from "./styles";
 import Inicio from "./Inicio";
 import MeusDados from "./MeusDados";
 import MeusPedidos from "./MeusPedidos";
+import { ContainerConteudo, ContainerMain } from "./styles";
 
 export default function ContaUsuario() {
   const [inicioAtivo, setInicioAtivo] = useState(true);
   const [dadosAtivo, setDadosAtivo] = useState(false);
   const [pedidosAtivo, setPedidosAtivo] = useState(false);
-
-  const aoMudarItemAtivo = (index) => {
-    if (index === 0) {
-      setInicioAtivo(true);
-      setDadosAtivo(false);
-      setPedidosAtivo(false);
-    } else if (index === 1) {
-      setInicioAtivo(false);
-      setDadosAtivo(true);
-      setPedidosAtivo(false);
-    } else if (index === 2) {
-      setInicioAtivo(false);
-      setDadosAtivo(false);
-      setPedidosAtivo(true);
-    }
-  };
 
   const aoApertarMeusDadosNoInicio = () => {
     setDadosAtivo(true);
@@ -67,7 +50,6 @@ export default function ContaUsuario() {
     <>
       <Header />
       <ContainerMain>
-        <ItensDashboard aoMudarItemAtivo={aoMudarItemAtivo} />
         <ContainerConteudo>
           {inicioAtivo && (
             <Inicio

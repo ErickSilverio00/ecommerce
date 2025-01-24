@@ -6,7 +6,6 @@ import Produto from "../../components/Produto";
 import useProdutosCurtidos from "../../stores/useProdutosCurtidos";
 import { colors } from "../../styles/colors";
 import { fonte } from "../../styles/global";
-import LayoutBase from "../../templates/LayoutBase";
 import {
   ContainerCarrinhoVazio,
   TextoDescricaoCarrinhoVazio,
@@ -25,52 +24,50 @@ export default function Favoritos() {
   const navigate = useNavigate();
 
   return (
-    <LayoutBase>
-      <main>
-        <ContainerFavoritos>
-          {produtosCurtidos.produtosCurtidos.length > 0 && (
-            <>
-              <ContainerTitulo>
-                <Heart size={32} weight="fill" color={colors.primaria} />
-                <Titulo>Favoritos</Titulo>
-              </ContainerTitulo>
-              <ContainerProdutosFavoritos>
-                {produtosCurtidos.produtosCurtidos.map((produto) => (
-                  <Produto produto={produto} flex={firstMediaQuery ? 1 : 0.2} />
-                ))}
-              </ContainerProdutosFavoritos>
-            </>
-          )}
-          {produtosCurtidos.produtosCurtidos.length === 0 && (
-            <ContainerCarrinhoVazio>
-              <TextoTituloCarrinhoVazio>
-                Você ainda não curtiu nenhum produto
-              </TextoTituloCarrinhoVazio>
-              <TextoDescricaoCarrinhoVazio>
-                Adquira nossos melhores produtos!
-              </TextoDescricaoCarrinhoVazio>
-              <Botao
-                corDeFundo={colors.primaria}
-                corDeFundoHover={colors.primariaClara}
-                mostrarBoxShadow={true}
-                corTexto={colors.branco}
-                fontFamily={fonte}
-                fontSize={14}
-                fontWeight={600}
-                flexGrow={1}
-                flexBasis={40}
-                width={firstMediaQuery ? "75%" : "55%"}
-                height={40}
-                tamanho="small"
-                variante="contained"
-                texto="CONTINUAR COMPRANDO"
-                type="button"
-                aoClicar={() => navigate("/")}
-              />
-            </ContainerCarrinhoVazio>
-          )}
-        </ContainerFavoritos>
-      </main>
-    </LayoutBase>
+    <main>
+      <ContainerFavoritos>
+        {produtosCurtidos.produtosCurtidos.length > 0 && (
+          <>
+            <ContainerTitulo>
+              <Heart size={32} weight="fill" color={colors.primaria} />
+              <Titulo>Favoritos</Titulo>
+            </ContainerTitulo>
+            <ContainerProdutosFavoritos>
+              {produtosCurtidos.produtosCurtidos.map((produto) => (
+                <Produto produto={produto} flex={firstMediaQuery ? 1 : 0.2} />
+              ))}
+            </ContainerProdutosFavoritos>
+          </>
+        )}
+        {produtosCurtidos.produtosCurtidos.length === 0 && (
+          <ContainerCarrinhoVazio>
+            <TextoTituloCarrinhoVazio>
+              Você ainda não curtiu nenhum produto
+            </TextoTituloCarrinhoVazio>
+            <TextoDescricaoCarrinhoVazio>
+              Adquira nossos melhores produtos!
+            </TextoDescricaoCarrinhoVazio>
+            <Botao
+              corDeFundo={colors.primaria}
+              corDeFundoHover={colors.primariaClara}
+              mostrarBoxShadow={true}
+              corTexto={colors.branco}
+              fontFamily={fonte}
+              fontSize={14}
+              fontWeight={600}
+              flexGrow={1}
+              flexBasis={40}
+              width={firstMediaQuery ? "75%" : "55%"}
+              height={40}
+              tamanho="small"
+              variante="contained"
+              texto="CONTINUAR COMPRANDO"
+              type="button"
+              aoClicar={() => navigate("/")}
+            />
+          </ContainerCarrinhoVazio>
+        )}
+      </ContainerFavoritos>
+    </main>
   );
 }

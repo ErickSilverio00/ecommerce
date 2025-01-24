@@ -6,7 +6,7 @@ export default function LayoutBase({ children }) {
   return (
     <>
       <Header />
-      {children}
+      <div className="container">{children}</div>
       <Footer />
     </>
   );

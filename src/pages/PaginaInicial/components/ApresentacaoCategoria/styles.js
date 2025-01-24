@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import { colors } from "../../styles/colors";
-import { fonte } from "../../styles/global";
+import { colors } from "../../../../styles/colors";
+import { fonte } from "../../../../styles/global";
 
 export const ContainerBallImg = styled.div`
   display: flex;

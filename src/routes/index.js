@@ -4,16 +4,18 @@ import useAuthStore from "../stores/useAuthStore";
 import Preloading from "../templates/PreLoading";
 import RotaErrada from "../templates/RotaErrada";
 
-const TelaInicial = lazy(() => import("../pages/TelaInicial"));
-const Acessorios = lazy(() => import("../pages/Produtos/Acessorios"));
-const Calcados = lazy(() => import("../pages/Produtos/Calcados"));
+const PaginaInicial = lazy(() => import("../pages/PaginaInicial"));
+const Acessorios = lazy(() => import("../pages/PaginasProdutos/Acessorios"));
+const Calcados = lazy(() => import("../pages/PaginasProdutos/Calcados"));
 const Colecoes = lazy(() => import("../pages/Colecoes"));
 const Favoritos = lazy(() => import("../pages/Favoritos"));
-const Roupas = lazy(() => import("../pages/Produtos/Roupas"));
-const Feminino = lazy(() => import("../pages/Produtos/Feminino"));
-const Masculino = lazy(() => import("../pages/Produtos/Masculino"));
+const Roupas = lazy(() => import("../pages/PaginasProdutos/Roupas"));
+const Feminino = lazy(() => import("../pages/PaginasProdutos/Feminino"));
+const Masculino = lazy(() => import("../pages/PaginasProdutos/Masculino"));
 const PaginaProduto = lazy(() => import("../pages/PaginaProduto"));
-const BuscaProdutos = lazy(() => import("../pages/Produtos/BuscaProdutos"));
+const BuscaProdutos = lazy(() =>
+  import("../pages/PaginasProdutos/BuscaProdutos")
+);
 const Login = lazy(() => import("../pages/FluxoDeAutenticacao/Login"));
 const Cadastro = lazy(() => import("../pages/FluxoDeAutenticacao/Cadastro"));
 const EsqueciSenha = lazy(() =>
@@ -42,7 +44,7 @@ export default function Rotas() {
     <Suspense fallback={<Preloading />}>
       <Routes>
         <Route path="*" element={<RotaErrada />} />
-        <Route path="/" element={<TelaInicial />} />
+        <Route path="/" element={<PaginaInicial />} />
         <Route path="/acessorios" element={<Acessorios />} />
         <Route path="/calcados" element={<Calcados />} />
         <Route path="/colecoes" element={<Colecoes />} />

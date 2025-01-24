@@ -7,7 +7,6 @@ export const ContainerFavoritos = styled.div`
   flex-direction: column;
   gap: 20px;
   margin-bottom: 40px;
-  margin-inline: 20px;
   margin-top: 130px;
 
   @media (max-width: 500px) {

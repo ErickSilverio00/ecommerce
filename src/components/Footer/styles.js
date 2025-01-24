@@ -11,10 +11,14 @@ export const FirstLine = styled.div`
   display: flex;
   width: 100%;
   align-items: center;
-  justify-content: space-around;
+  justify-content: center;
   padding-block: 60px;
-  gap: 20px;
+  gap: 110px;
   background-color: ${colors.cinzaSuperClaro};
+
+  @media (max-width: 1200px) {
+    gap: 50px;
+  }
 
   @media (max-width: 800px) {
     flex-direction: column;

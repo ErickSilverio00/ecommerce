@@ -1,56 +1,54 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
-import logoMC from "../../assets/img/logoMatheusCalcados2.png";
-import { useMediaQuery } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import { useNavigate } from "react-router-dom";
-import { Button, IconButton } from "@mui/material";
+import { Button, IconButton, useMediaQuery } from "@mui/material";
+import Drawer from "@mui/material/Drawer";
+import List from "@mui/material/List";
 import {
-  MagnifyingGlass,
-  UserCircle,
-  Heart,
-  ShoppingCart,
   ArrowLeft,
-  House,
   CoatHanger,
-  TShirt,
-  SneakerMove,
-  SketchLogo,
-  SignOut,
+  Heart,
+  House,
+  MagnifyingGlass,
+  ShoppingCart,
   SignIn,
+  SignOut,
+  SketchLogo,
+  SneakerMove,
+  TShirt,
+  UserCircle,
 } from "@phosphor-icons/react";
+import React, { useEffect, useRef, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import logoMC from "../../assets/img/logoMatheusCalcados2.png";
+import useAuthStore from "../../stores/useAuthStore";
+import useCarrinho from "../../stores/useCarrinho";
+import useProdutos from "../../stores/useProdutos";
+import useProdutosCurtidos from "../../stores/useProdutosCurtidos";
+import { colors } from "../../styles/colors";
 import {
+  ContainerBotaoBuscar,
+  ContainerContadorItens,
+  ContainerFooterMenu,
   ContainerHeader,
+  ContainerItem,
+  ContainerListaDeBuscas,
+  ContainerLoginCadastro,
+  ContainerSearch,
+  ContainerVoltarDrawer,
   FirstLine,
   FirstLineLeft,
+  FirstLineRight,
+  ImgItem,
+  InputSearch,
+  ItemListaDeBuscas,
   LogoMC,
   SecondLine,
   SecondLineNav,
-  FirstLineRight,
-  ContainerSearch,
-  InputSearch,
-  ContainerLoginCadastro,
   TextLoginCadastro,
-  ContainerBotaoBuscar,
-  ContainerListaDeBuscas,
-  ItemListaDeBuscas,
-  ImgItem,
+  TextoContadorItens,
+  TextoItens,
   TextoProduto,
   TextoProdutoNaoEncontrado,
-  ContainerVoltarDrawer,
-  TextoItens,
-  ContainerItem,
-  ContainerContadorItens,
-  TextoContadorItens,
-  ContainerFooterMenu,
 } from "./styles";
-import useProdutos from "../../stores/useProdutos";
-import Drawer from "@mui/material/Drawer";
-import List from "@mui/material/List";
-import useAuthStore from "../../stores/useAuthStore";
-import useCarrinho from "../../stores/useCarrinho";
-import useProdutosCurtidos from "../../stores/useProdutosCurtidos";
-import { colors } from "../../styles/colors";
 
 export default function Header() {
   const navigate = useNavigate();
@@ -304,6 +302,7 @@ export default function Header() {
                     style={{ textDecoration: "none" }}
                     to={`/produto/${result.nome_produto}`}
                     onClick={aoClicarNoProdutoEscolhido}
+                    key={index}
                   >
                     <ItemListaDeBuscas key={index}>
                       <ImgItem
@@ -482,16 +481,24 @@ export default function Header() {
                       <TextoItens>{item.texto}</TextoItens>
                     </ContainerItem>
                   ))}
-                  {user && (
-                    <ContainerItem onClick={() => navigate("/favoritos")}>
-                      <Heart size={24} color={colors.preto2} />
-                      <TextoItens>Meus favoritos</TextoItens>
-                    </ContainerItem>
-                  )}
                   <ContainerFooterMenu>
                     {user && (
                       <>
-                        <ContainerItem onClick={() => navigate("/minha-conta")}>
+                        <ContainerItem
+                          onClick={() => [
+                            navigate("/favoritos"),
+                            setDrawerOpen(false),
+                          ]}
+                        >
+                          <Heart size={24} color={colors.preto2} />
+                          <TextoItens>Meus favoritos</TextoItens>
+                        </ContainerItem>
+                        <ContainerItem
+                          onClick={() => [
+                            navigate("/minha-conta"),
+                            setDrawerOpen(false),
+                          ]}
+                        >
                           <UserCircle size={24} color={colors.preto2} />
                           <TextoItens>Minha Conta</TextoItens>
                         </ContainerItem>

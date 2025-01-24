@@ -1,6 +1,6 @@
 import React from "react";
 import fundoAcessorios from "../../assets/img/Acessorios.png";
-import LayoutPaginaProdutos from "../../templates/LayoutPaginaProdutos";
+import LayoutPaginaProdutos from "./LayoutPaginasProdutos";
 
 export default function Acessorios() {
   const categorias = ["Bolas", "Bolsas", "Bonés", "Cintos", "Mochilas"];

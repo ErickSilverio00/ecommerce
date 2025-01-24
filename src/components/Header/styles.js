@@ -19,7 +19,7 @@ export const FirstLine = styled.div`
   width: 100%;
   height: 63px;
   gap: 80px;
-  justify-content: space-between;
+  justify-content: center;
   background-color: ${colors.primariaClara};
 
   @media (max-width: 672px) {
@@ -38,6 +38,7 @@ export const FirstLine = styled.div`
 export const FirstLineLeft = styled.div`
   display: flex;
   width: 100%;
+  max-width: 1200px;
   gap: 20px;
   align-items: center;
   padding-left: 20px;
@@ -194,6 +195,7 @@ export const FirstLineRight = styled.div`
   display: flex;
   gap: 20px;
   align-items: center;
+  max-width: 1200px;
   padding-right: 20px;
 
   @media (max-width: 528px) {

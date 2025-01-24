@@ -1,6 +1,6 @@
 import React from "react";
 import fundoRoupas from "../../assets/img/Roupas.png";
-import LayoutPaginaProdutos from "../../templates/LayoutPaginaProdutos";
+import LayoutPaginaProdutos from "./LayoutPaginasProdutos";
 
 export default function Roupas() {
   const categorias = ["Bermudas", "Camisas", "Calças", "Shorts", "Vestidos"];

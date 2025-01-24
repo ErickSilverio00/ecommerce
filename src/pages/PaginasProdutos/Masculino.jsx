@@ -1,8 +1,8 @@
 import React from "react";
-import fundoFeminino from "../../assets/img/Feminino.png";
-import LayoutPaginaProdutos from "../../templates/LayoutPaginaProdutos";
+import fundoMasculino from "../../assets/img/Masculino.png";
+import LayoutPaginaProdutos from "./LayoutPaginasProdutos";
 
-export default function Feminino() {
+export default function Masculino() {
   const categorias = [
     "Bolsas",
     "Camisas",
@@ -38,8 +38,8 @@ export default function Feminino() {
     <LayoutPaginaProdutos
       categorias={categorias}
       tamanhos={tamanhos}
-      imagemSecao={fundoFeminino}
-      tituloSecao="Feminino"
+      imagemSecao={fundoMasculino}
+      tituloSecao="Masculino"
     />
   );
 }

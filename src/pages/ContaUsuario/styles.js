@@ -12,7 +12,7 @@ export const ContainerMain = styled.div`
 export const ContainerConteudo = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 20px;
+  margin: 20px 0px;
   width: 100%;
   height: 79.8dvh;
   box-shadow: 1px 4px 12px 3px rgba(0, 0, 0, 0.1);
@@ -21,6 +21,5 @@ export const ContainerConteudo = styled.div`
 
   @media (max-width: 500px) {
     height: 86dvh;
-    width: 90%;
   }
 `;

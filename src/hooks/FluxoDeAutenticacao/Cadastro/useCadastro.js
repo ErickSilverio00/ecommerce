@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import { makeValidation } from "../../../utils/funcoes";
 import validationSchema from "./schema";
 
-export default function useCamposCadastro() {
+export default function useCadastro() {
   const formCadastroRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
   const [clienteCadastrado, setClienteCadastrado] = useState(false);

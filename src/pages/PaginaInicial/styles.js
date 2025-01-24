@@ -16,7 +16,7 @@ export const ContainerPrincipal = styled.div`
 export const ContainerSlides = styled.div`
   display: flex;
   width: 100%;
-  height: 86dvh;
+  height: calc(100dvh - 300px);
   z-index: 0;
 
   @media (max-width: 810px) {
@@ -43,7 +43,7 @@ export const ContainerSlides = styled.div`
 export const ContainerImagem = styled.img`
   display: flex;
   width: 100%;
-  height: 86dvh;
+  height: calc(100dvh - 300px);
   object-fit: cover;
 
   @media (max-width: 810px) {
@@ -87,7 +87,6 @@ export const ContainerPrimeiraLinha = styled.div`
   justify-content: space-between;
   max-width: 100%;
   align-items: end;
-  margin-inline: 20px;
 `;
 
 export const ContainerSetas = styled.div`

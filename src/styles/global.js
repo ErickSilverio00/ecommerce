@@ -1,4 +1,5 @@
 import styled, { createGlobalStyle } from "styled-components";
+import { colors } from "./colors";
 
 export default createGlobalStyle`
   * {
@@ -8,10 +9,42 @@ export default createGlobalStyle`
     box-sizing: border-box;
   }
 
+  html, body, #root {
+    height: 100%;
+  }
+
   body {
     font: 14px 'Montserrat', sans-serif;
     background-color: #fff;
+    color: #333;
     -webkit-font-smoothing: antialiased !important;
+  }
+
+  a {
+    text-decoration: none !important;
+    color: inherit;
+    cursor: pointer;
+  }
+
+  ul {
+    list-style: none;
+  }
+
+  button {
+    cursor: pointer;
+    border: none;
+    background: none;
+  }
+
+  .container {
+    max-width: 1400px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 40px;
+
+    @media (max-width: 600px) {
+      padding: 0 20px;
+    }
   }
 `;
 
@@ -110,4 +143,38 @@ export const AreaItem = styled.div.withConfig({
   height: ${({ hg }) => hg ?? "unset"};
   box-shadow: ${(props) =>
     props.useBoxShadow ? "0px 0px 10px 0px rgba(0, 0, 0, 0.1)" : "none"};
+
+  @media (max-width: 600px) {
+    width: ${(props) => (props.wdr ? props.wdr : 100)}%;
+  }
+`;
+
+export const ContainerTitleSubtitle = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+`;
+
+export const Titulo = styled.h2`
+  font-family: ${fonte};
+  font-size: 36px;
+  font-weight: bold;
+  margin: 0;
+  color: ${colors.preto2};
+
+  @media (max-width: 430px) {
+    font-size: 28px;
+  }
+`;
+
+export const Subtitulo = styled.h6`
+  font-family: ${fonte};
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+  color: ${colors.primariaClara};
+
+  @media (max-width: 430px) {
+    font-size: 14px;
+  }
 `;

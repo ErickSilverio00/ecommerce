@@ -61,7 +61,6 @@ export const ContainerPrimeiraLinha = styled.div`
   justify-content: space-between;
   max-width: 100%;
   align-items: end;
-  margin-inline: 20px;
 `;
 
 export const ContainerSetas = styled.div`

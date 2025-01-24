@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { initMercadoPago, Wallet } from "@mercadopago/sdk-react";
+import { Wallet } from "@mercadopago/sdk-react";
 import { useMediaQuery } from "@mui/material";
 import {
   CheckCircle,
@@ -10,18 +10,13 @@ import {
   X,
 } from "@phosphor-icons/react";
 import { Form } from "@unform/web";
-import { useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import Botao from "../../components/Botao";
 import CampoTexto from "../../components/CampoTexto";
-import { criarSessaoCheckout } from "../../services/Carrinho";
-import useAuthStore from "../../stores/useAuthStore";
-import useCarrinho from "../../stores/useCarrinho";
+import useHookCarrinho from "../../hooks/Carrinho/useHookCarrinho";
 import { colors } from "../../styles/colors";
 import { AreaItem, fonte } from "../../styles/global";
-import LayoutBase from "../../templates/LayoutBase";
 import { formatarMoeda } from "../../utils/funcoes";
 import {
   ContainerBotoesEdicaoEndereco,
@@ -80,520 +75,400 @@ import {
   ValorTotal,
 } from "./styles";
 
-const token = process.env.REACT_APP_MERCADO_PAGO_PUBLIC_KEY;
-
 export default function Carrinho() {
   const firstMediaQuery = useMediaQuery("(max-width: 672px)");
-  const { user } = useAuthStore();
-  const carrinho = useCarrinho();
-  const navigate = useNavigate();
-  const formEnderecoRef = useRef(null);
-  const [preferenceId, setPreferenceId] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [etapaCarrinho, setEtapaCarrinho] = useState(true);
-  const [etapaPagamento, setEtapaPagamento] = useState(false);
-  const [edicaoEnderecoAtiva, setEdicaoEnderecoAtiva] = useState(false);
-
-  const aoMudarParaEdicaoEndereco = () => {
-    formEnderecoRef?.current?.setFieldValue("rua", user.endereco.rua);
-    formEnderecoRef?.current?.setFieldValue(
-      "complemento",
-      user.endereco.complemento
-    );
-    formEnderecoRef?.current?.setFieldValue("bairro", user.endereco.bairro);
-    formEnderecoRef?.current?.setFieldValue("cep", user.endereco.cep);
-    formEnderecoRef?.current?.setFieldValue("cidade", user.endereco.cidade);
-    setEdicaoEnderecoAtiva(true);
-  };
-
-  const validarEndereco = async (formData) => {
-    if (formData.rua === "") {
-      formEnderecoRef.current.setFieldError("rua", "Campo Obrigatório");
-      return false;
-    }
-    if (formData.complemento === "") {
-      formEnderecoRef.current.setFieldError("complemento", "Campo Obrigatório");
-      return false;
-    }
-    if (formData.bairro === "") {
-      formEnderecoRef.current.setFieldError("bairro", "Campo Obrigatório");
-      return false;
-    }
-    if (formData.cep === "") {
-      formEnderecoRef.current.setFieldError("cep", "Campo Obrigatório");
-      return false;
-    }
-    if (formData.cidade === "") {
-      formEnderecoRef.current.setFieldError("cidade", "Campo Obrigatório");
-      return false;
-    }
-
-    return true;
-  };
-
-  const atualizarEndereco = async () => {
-    const formData = formEnderecoRef?.current?.getData();
-    const enderecoValido = await validarEndereco(formData);
-    if (enderecoValido) {
-      return;
-    }
-
-    try {
-      const params = {
-        id_cliente: user.idCliente,
-        rua: formData.rua,
-        complemento: formData.complemento,
-        bairro: formData.bairro,
-        cep: formData.cep,
-        cidade: formData.cidade,
-      };
-
-      // const response = await atualizarEnderecoEcommerce(
-      //   params.id_cliente,
-      //   params
-      // );
-      // if (response.mensagem === "Endereço atualizado com sucesso") {
-      //   buscarDadosCliente();
-      //   toast.success("Seu endereço foi atualizado com sucesso.");
-      //   setEdicaoEnderecoAtiva(false);
-      // }
-    } catch (error) {
-      toast.error(`Erro ao atualizar seu endereço, tente novamente.`);
-    }
-  };
-
-  const removerItemCarrinho = (item) => {
-    try {
-      setIsLoading(true);
-      carrinho.removerItemCarrinho(item);
-    } catch (error) {
-      toast.error(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const alterarQuantidadeProduto = async (idCarrinho, novaQuantidade) => {
-    try {
-      await carrinho.atualizarQuantidadeItemCarrinho(
-        idCarrinho,
-        novaQuantidade
-      );
-      carrinho.fetchItensCarrinho(user.idCliente);
-    } catch (error) {
-      toast.error(`Erro ao alterar a quantidade do produto: ${error}`);
-    }
-  };
-
-  const irParaPagamento = async () => {
-    try {
-      const objetoEnvio = {
-        carrinho: carrinho.itensCarrinho,
-        cliente: user.idCliente,
-      };
-      setIsLoading(true);
-      const url = await criarSessaoCheckout(objetoEnvio);
-      setPreferenceId(url.data.id);
-      setEtapaPagamento(true);
-      setEtapaCarrinho(false);
-      setIsLoading(false);
-    } catch (error) {
-      toast.error(`Erro ao criar sessão de checkout: ${error}`);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    initMercadoPago(`${token}`, {
-      locale: "pt-BR",
-    });
-  }, []);
+  const {
+    user,
+    carrinho,
+    navigate,
+    formEnderecoRef,
+    preferenceId,
+    isLoading,
+    etapaCarrinho,
+    setEtapaCarrinho,
+    etapaPagamento,
+    setEtapaPagamento,
+    edicaoEnderecoAtiva,
+    aoMudarParaEdicaoEndereco,
+    atualizarEndereco,
+    removerItemCarrinho,
+    alterarQuantidadeProduto,
+    irParaPagamento,
+  } = useHookCarrinho();
 
   return (
-    <LayoutBase>
-      <main>
-        <ContainerCarrinho>
-          {carrinho.itensCarrinho.length > 0 && (
-            <>
-              <ContainerNavegacaoPagamento>
-                <ContainerItemPagamento
-                  style={{ cursor: etapaPagamento && "pointer" }}
-                  onClick={() => [
-                    setEtapaCarrinho(true),
-                    setEtapaPagamento(false),
-                  ]}
+    <main>
+      <ContainerCarrinho>
+        {carrinho.itensCarrinho.length > 0 && (
+          <>
+            <ContainerNavegacaoPagamento>
+              <ContainerItemPagamento
+                style={{ cursor: etapaPagamento && "pointer" }}
+                onClick={() => [
+                  setEtapaCarrinho(true),
+                  setEtapaPagamento(false),
+                ]}
+              >
+                <ShoppingCart size={22} weight="fill" color={colors.primaria} />
+                <TextoItemPagamento>Carrinho</TextoItemPagamento>
+              </ContainerItemPagamento>
+              <ContainerItemPagamento>
+                <LinhaPagamento
+                  style={{
+                    backgroundColor: etapaCarrinho
+                      ? colors.cinzaSuperClaro
+                      : colors.primaria,
+                  }}
+                />
+                <CreditCard
+                  size={22}
+                  weight="fill"
+                  color={
+                    etapaCarrinho ? colors.cinzaSuperClaro : colors.primaria
+                  }
+                />
+                <TextoItemPagamento
+                  style={{
+                    color: etapaCarrinho
+                      ? colors.cinzaSuperClaro
+                      : colors.primaria,
+                  }}
                 >
-                  <ShoppingCart
-                    size={22}
-                    weight="fill"
-                    color={colors.primaria}
-                  />
-                  <TextoItemPagamento>Carrinho</TextoItemPagamento>
-                </ContainerItemPagamento>
-                <ContainerItemPagamento>
-                  <LinhaPagamento
-                    style={{
-                      backgroundColor: etapaCarrinho
-                        ? colors.cinzaSuperClaro
-                        : colors.primaria,
-                    }}
-                  />
-                  <CreditCard
-                    size={22}
-                    weight="fill"
-                    color={
-                      etapaCarrinho ? colors.cinzaSuperClaro : colors.primaria
-                    }
-                  />
-                  <TextoItemPagamento
-                    style={{
-                      color: etapaCarrinho
-                        ? colors.cinzaSuperClaro
-                        : colors.primaria,
-                    }}
-                  >
-                    Pagamento
-                  </TextoItemPagamento>
-                </ContainerItemPagamento>
-                <ContainerItemPagamento>
-                  <LinhaPagamento />
-                  <CheckCircle
-                    size={22}
-                    weight="fill"
-                    color={colors.cinzaSuperClaro}
-                  />
-                  <TextoItemPagamento style={{ color: colors.cinzaSuperClaro }}>
-                    Concluir
-                  </TextoItemPagamento>
-                </ContainerItemPagamento>
-              </ContainerNavegacaoPagamento>
-              {etapaCarrinho && (
-                <ContainerEsquerdaDireita>
-                  <ContainerEsquerdo>
-                    <ContainerEndereco>
-                      <ContainerTituloEndereco>
-                        <TituloCarrinho>Endereço</TituloCarrinho>
-                        <MapPinLine
-                          size={20}
-                          weight="bold"
-                          color={colors.preto2}
-                        />
-                      </ContainerTituloEndereco>
-                      {!edicaoEnderecoAtiva && (
-                        <ContainerEnderecoCadastrado>
-                          <TextosEnderecos>
-                            Rua: {user?.endereco?.rua}
-                          </TextosEnderecos>
-                          <TextosEnderecos>
-                            Complemento: {user?.endereco?.complemento}
-                          </TextosEnderecos>
-                          <TextosEnderecos>
-                            Setor: {user?.endereco?.bairro}
-                          </TextosEnderecos>
-                          <TextosEnderecos>
-                            CEP: {user?.endereco?.cep} -{" "}
-                            {user?.endereco?.cidade}
-                          </TextosEnderecos>
-                          <TextoEditarEndereco
-                            onClick={aoMudarParaEdicaoEndereco}
-                          >
-                            EDITAR
-                          </TextoEditarEndereco>
-                        </ContainerEnderecoCadastrado>
-                      )}
-                      <Form
-                        erf={formEnderecoRef}
-                        onSubmit={atualizarEndereco}
-                        style={{
-                          display: !edicaoEnderecoAtiva && "none",
-                        }}
-                      >
-                        <ContainerCamposEdicaoEndereco>
-                          <AreaItem wd="20">
-                            <CampoTexto name="rua" label="Rua" />
-                          </AreaItem>
-                          <AreaItem wd="40">
-                            <CampoTexto
-                              name="complemento"
-                              label="Complemento"
-                            />
-                          </AreaItem>
-                          <AreaItem wd="30">
-                            <CampoTexto name="setor" label="Setor" />
-                          </AreaItem>
-                          <AreaItem wd="20">
-                            <CampoTexto name="cep" label="CEP" />
-                          </AreaItem>
-                          <AreaItem wd="30">
-                            <CampoTexto name="cidade" label="Cidade" />
-                          </AreaItem>
-                        </ContainerCamposEdicaoEndereco>
-                        <ContainerBotoesEdicaoEndereco>
-                          <Botao
-                            tipo="submit"
-                            variante="contained"
-                            tamanho="small"
-                            texto="Salvar alterações"
-                            mostrarBoxShadow={true}
-                            corDeFundo={colors.verde}
-                            corDeFundoHover={colors.verdeClaro}
-                            fontFamily={fonte}
-                            fontSize={10}
-                            fontWeight="600"
-                            width="49.25%"
-                            height={36}
-                          />
-                        </ContainerBotoesEdicaoEndereco>
-                      </Form>
-                    </ContainerEndereco>
-
-                    <ContainerItensCarrinho>
-                      <ContainerTituloCarrinho>
-                        <TituloCarrinho>Carrinho</TituloCarrinho>
-                        <ShoppingCart
-                          size={20}
-                          weight="bold"
-                          color={colors.preto2}
-                        />
-                      </ContainerTituloCarrinho>
-                      {console.log(user)}
-                      {carrinho.itensCarrinho.map((item) => (
-                        <ContainerItem>
-                          <Link
-                            style={{ textDecoration: "none" }}
-                            to={`/produto/${item.nome_produto}`}
-                          >
-                            <ContainerImagemCarrinho>
-                              <ImagemCarrinho
-                                src={item.imagens_variacao_produto[0]}
-                              />
-                            </ContainerImagemCarrinho>
-                          </Link>
-                          <ContainerInfosItem>
-                            <ContainerInfosItemPrimeira>
-                              <NomeIitem>{item.nome_produto}</NomeIitem>
-                              <CorETamanho>
-                                {item.cor_variacao_produto} |{" "}
-                                {item.medida_variacao_produto}
-                              </CorETamanho>
-                              <PrecoItem>
-                                {formatarMoeda(item.preco_venda_produto)}
-                              </PrecoItem>
-                            </ContainerInfosItemPrimeira>
-                            <ContainerInfosItemSegunda>
-                              <TextoQtde>Quantidade</TextoQtde>
-                              <ContainerSelect
-                                onChange={(e) =>
-                                  alterarQuantidadeProduto(
-                                    item.id_carrinho,
-                                    parseInt(e.target.value)
-                                  )
-                                }
-                                value={item.quantidade}
-                              >
-                                {Array.from(
-                                  { length: item.qtd_disponivel_produto },
-                                  (_, index) => (
-                                    <option key={index + 1} value={index + 1}>
-                                      {index + 1}
-                                    </option>
-                                  )
-                                )}
-                              </ContainerSelect>
-                            </ContainerInfosItemSegunda>
-                            <ContainerInfosItemTerceira
-                              onClick={() =>
-                                removerItemCarrinho(item.id_carrinho)
-                              }
-                            >
-                              <X
-                                size={22}
-                                color={colors.cinzaClaro}
-                                style={{
-                                  cursor: "pointer",
-                                }}
-                              />
-                            </ContainerInfosItemTerceira>
-                          </ContainerInfosItem>
-                        </ContainerItem>
-                      ))}
-                    </ContainerItensCarrinho>
-                  </ContainerEsquerdo>
-                  <ContainerDireito>
-                    <ContainerResumo>
-                      <ContainerTituloEndereco>
-                        <TituloResumo>Resumo do pedido</TituloResumo>
-                        <ReadCvLogo
-                          size={20}
-                          weight="bold"
-                          color={colors.preto2}
-                        />
-                      </ContainerTituloEndereco>
-                      <ContainerInfosResumo>
-                        <ContainerInfo>
-                          <TextoInfo>Subtotal</TextoInfo>
-                          <ValorInfo>
-                            {formatarMoeda(carrinho.valorTotal)}
-                          </ValorInfo>
-                        </ContainerInfo>
-                        <ContainerInfo>
-                          <TextoInfo>Frete</TextoInfo>
-                          <ValorInfo style={{ color: colors.verde }}>
-                            GRÁTIS
-                          </ValorInfo>
-                        </ContainerInfo>
-                      </ContainerInfosResumo>
-                      <ContainerTotal>
-                        <TextoTotal>Valor Total</TextoTotal>
-                        <ValorTotal>
-                          {formatarMoeda(carrinho.valorTotal)}
-                        </ValorTotal>
-                      </ContainerTotal>
-                      <Botao
-                        corDeFundo={colors.primaria}
-                        corDeFundoHover={colors.primariaClara}
-                        mostrarBoxShadow={true}
-                        corTexto={colors.branco}
-                        fontFamily={fonte}
-                        fontSize={14}
-                        fontWeight={600}
-                        flexGrow={1}
-                        flexBasis={40}
-                        width="100%"
-                        height={40}
-                        tamanho="small"
-                        variante="contained"
-                        texto={isLoading ? "Aguarde..." : "Ir para o pagamento"}
-                        type="button"
-                        disabled={isLoading && true}
-                        aoClicar={irParaPagamento}
+                  Pagamento
+                </TextoItemPagamento>
+              </ContainerItemPagamento>
+              <ContainerItemPagamento>
+                <LinhaPagamento />
+                <CheckCircle
+                  size={22}
+                  weight="fill"
+                  color={colors.cinzaSuperClaro}
+                />
+                <TextoItemPagamento style={{ color: colors.cinzaSuperClaro }}>
+                  Concluir
+                </TextoItemPagamento>
+              </ContainerItemPagamento>
+            </ContainerNavegacaoPagamento>
+            {etapaCarrinho && (
+              <ContainerEsquerdaDireita>
+                <ContainerEsquerdo>
+                  <ContainerEndereco>
+                    <ContainerTituloEndereco>
+                      <TituloCarrinho>Endereço</TituloCarrinho>
+                      <MapPinLine
+                        size={20}
+                        weight="bold"
+                        color={colors.preto2}
                       />
-                    </ContainerResumo>
-                  </ContainerDireito>
-                </ContainerEsquerdaDireita>
-              )}
-              {etapaPagamento && (
-                <ContainerResumoPagamento>
-                  <ContainerTituloEndereco>
-                    <TituloResumo>Confirmar dados do pedido</TituloResumo>
-                    <ReadCvLogo size={20} weight="bold" color={colors.preto2} />
-                  </ContainerTituloEndereco>
-                  <ContainerResumoDados>
-                    <ContainerResumoDadosEsquerda>
-                      {carrinho.itensCarrinho.map((item) => (
-                        <ContainerItemResumo>
-                          <ContainerImagemResumo>
+                    </ContainerTituloEndereco>
+                    {!edicaoEnderecoAtiva && (
+                      <ContainerEnderecoCadastrado>
+                        <TextosEnderecos>
+                          Rua: {user?.endereco?.rua}
+                        </TextosEnderecos>
+                        <TextosEnderecos>
+                          Complemento: {user?.endereco?.complemento}
+                        </TextosEnderecos>
+                        <TextosEnderecos>
+                          Bairro: {user?.endereco?.bairro}
+                        </TextosEnderecos>
+                        <TextosEnderecos>
+                          CEP: {user?.endereco?.cep} - {user?.endereco?.cidade}
+                        </TextosEnderecos>
+                        <TextoEditarEndereco
+                          onClick={aoMudarParaEdicaoEndereco}
+                        >
+                          EDITAR
+                        </TextoEditarEndereco>
+                      </ContainerEnderecoCadastrado>
+                    )}
+                    <Form
+                      ref={formEnderecoRef}
+                      onSubmit={atualizarEndereco}
+                      style={{
+                        display: !edicaoEnderecoAtiva && "none",
+                      }}
+                    >
+                      <ContainerCamposEdicaoEndereco>
+                        <AreaItem wd="20">
+                          <CampoTexto name="rua" label="Rua" />
+                        </AreaItem>
+                        <AreaItem wd="40">
+                          <CampoTexto name="complemento" label="Complemento" />
+                        </AreaItem>
+                        <AreaItem wd="30">
+                          <CampoTexto name="bairro" label="Bairro" />
+                        </AreaItem>
+                        <AreaItem wd="20">
+                          <CampoTexto name="cep" label="CEP" />
+                        </AreaItem>
+                        <AreaItem wd="30">
+                          <CampoTexto name="cidade" label="Cidade" />
+                        </AreaItem>
+                      </ContainerCamposEdicaoEndereco>
+                      <ContainerBotoesEdicaoEndereco>
+                        <Botao
+                          tipo="submit"
+                          variante="contained"
+                          tamanho="small"
+                          texto="Salvar alterações"
+                          mostrarBoxShadow={true}
+                          corDeFundo={colors.verde}
+                          corDeFundoHover={colors.verdeClaro}
+                          fontFamily={fonte}
+                          fontSize={10}
+                          fontWeight="600"
+                          width={firstMediaQuery ? "100%" : "49.25%"}
+                          height={36}
+                        />
+                      </ContainerBotoesEdicaoEndereco>
+                    </Form>
+                  </ContainerEndereco>
+
+                  <ContainerItensCarrinho>
+                    <ContainerTituloCarrinho>
+                      <TituloCarrinho>Carrinho</TituloCarrinho>
+                      <ShoppingCart
+                        size={20}
+                        weight="bold"
+                        color={colors.preto2}
+                      />
+                    </ContainerTituloCarrinho>
+                    {carrinho.itensCarrinho.map((item, index) => (
+                      <ContainerItem key={index}>
+                        <Link
+                          style={{ textDecoration: "none" }}
+                          to={`/produto/${item.nome_produto}`}
+                        >
+                          <ContainerImagemCarrinho>
                             <ImagemCarrinho
                               src={item.imagens_variacao_produto[0]}
                             />
-                          </ContainerImagemResumo>
-                          <ContainerInfosItemResumo>
+                          </ContainerImagemCarrinho>
+                        </Link>
+                        <ContainerInfosItem>
+                          <ContainerInfosItemPrimeira>
                             <NomeIitem>{item.nome_produto}</NomeIitem>
-                            <CorETamanho style={{ fontSize: 12 }}>
-                              Cor: {item.cor_variacao_produto} | Medida:{" "}
-                              {item.medida_variacao_produto} | Unidades:{" "}
-                              {item.quantidade}
+                            <CorETamanho>
+                              {item.cor_variacao_produto} |{" "}
+                              {item.medida_variacao_produto}
                             </CorETamanho>
-                            <PrecoItem style={{ fontSize: 12 }}>
-                              Preço unitário:{" "}
+                            <PrecoItem>
                               {formatarMoeda(item.preco_venda_produto)}
                             </PrecoItem>
-                          </ContainerInfosItemResumo>
-                        </ContainerItemResumo>
-                      ))}
-                    </ContainerResumoDadosEsquerda>
-                    <ContainerResumoDadosDireita>
-                      <ContainerEnderecoResumo>
-                        <TituloEnderecoResumo>
-                          Endereço de entrega
-                        </TituloEnderecoResumo>
-                        <TextoEnderecoResumo>
-                          {user?.endereco?.rua}, {user?.endereco?.complemento},{" "}
-                          {user?.endereco?.bairro}, {user?.endereco?.cidade}
-                        </TextoEnderecoResumo>
-                        <TextoEnderecoResumo>
-                          CEP: {user?.endereco?.cep}
-                        </TextoEnderecoResumo>
-                      </ContainerEnderecoResumo>
-                      <ContainerInfosValoresResumo>
-                        <TituloEnderecoResumo>
-                          Data estimada de entrega
-                        </TituloEnderecoResumo>
-                        <TextoEnderecoResumo>
-                          {user?.endereco?.cidade === "Goiânia" && (
-                            <>
-                              Receba seu pedido até dia{" "}
-                              {new Date(
-                                new Date().setDate(new Date().getDate() + 4)
-                              ).toLocaleDateString()}
-                            </>
-                          )}
-                          {user?.endereco?.cidade !== "Goiânia" && (
-                            <>
-                              Receba seu pedido até dia{" "}
-                              {new Date(
-                                new Date().setDate(new Date().getDate() + 15)
-                              ).toLocaleDateString()}
-                            </>
-                          )}
-                        </TextoEnderecoResumo>
-                      </ContainerInfosValoresResumo>
-                      <ContainerInfosValoresResumo>
-                        <TituloEnderecoResumo>Pagamento</TituloEnderecoResumo>
-                        <ContainerInfoResumo>
-                          <TextoInfo>Frete</TextoInfo>
-                          <ValorInfo style={{ color: colors.verde }}>
-                            GRÁTIS
-                          </ValorInfo>
-                        </ContainerInfoResumo>
-                        <ContainerInfoResumo>
-                          <TextoInfo>Valor Total</TextoInfo>
-                          <ValorTotal>
-                            {formatarMoeda(carrinho.valorTotal)}
-                          </ValorTotal>
-                        </ContainerInfoResumo>
-                      </ContainerInfosValoresResumo>
-                      <Wallet
-                        initialization={{ preferenceId: preferenceId }}
-                        customization={{ texts: { valueProp: "smart_option" } }}
+                          </ContainerInfosItemPrimeira>
+                          <ContainerInfosItemSegunda>
+                            <TextoQtde>Quantidade</TextoQtde>
+                            <ContainerSelect
+                              onChange={(e) =>
+                                alterarQuantidadeProduto(
+                                  item.id_carrinho,
+                                  parseInt(e.target.value)
+                                )
+                              }
+                              value={item.quantidade}
+                            >
+                              {Array.from(
+                                { length: item.qtd_disponivel_produto },
+                                (_, index) => (
+                                  <option key={index + 1} value={index + 1}>
+                                    {index + 1}
+                                  </option>
+                                )
+                              )}
+                            </ContainerSelect>
+                          </ContainerInfosItemSegunda>
+                          <ContainerInfosItemTerceira
+                            onClick={() =>
+                              removerItemCarrinho(item.id_carrinho)
+                            }
+                          >
+                            <X
+                              size={22}
+                              color={colors.cinzaClaro}
+                              style={{
+                                cursor: "pointer",
+                              }}
+                            />
+                          </ContainerInfosItemTerceira>
+                        </ContainerInfosItem>
+                      </ContainerItem>
+                    ))}
+                  </ContainerItensCarrinho>
+                </ContainerEsquerdo>
+                <ContainerDireito>
+                  <ContainerResumo>
+                    <ContainerTituloEndereco>
+                      <TituloResumo>Resumo do pedido</TituloResumo>
+                      <ReadCvLogo
+                        size={20}
+                        weight="bold"
+                        color={colors.preto2}
                       />
-                    </ContainerResumoDadosDireita>
-                  </ContainerResumoDados>
-                </ContainerResumoPagamento>
-              )}
-            </>
-          )}
-          {carrinho.itensCarrinho.length === 0 && (
-            <ContainerCarrinhoVazio>
-              <TextoTituloCarrinhoVazio>
-                O seu carrinho está vazio
-              </TextoTituloCarrinhoVazio>
-              <TextoDescricaoCarrinhoVazio>
-                Adquira nossos melhores produtos!
-              </TextoDescricaoCarrinhoVazio>
-              <Botao
-                corDeFundo={colors.primaria}
-                corDeFundoHover={colors.primariaClara}
-                mostrarBoxShadow={true}
-                corTexto={colors.branco}
-                fontFamily={fonte}
-                fontSize={14}
-                fontWeight={600}
-                flexGrow={1}
-                flexBasis={40}
-                width={firstMediaQuery ? "75%" : "55%"}
-                height={40}
-                tamanho="small"
-                variante="contained"
-                texto="CONTINUAR COMPRANDO"
-                type="button"
-                aoClicar={() => navigate("/")}
-              />
-            </ContainerCarrinhoVazio>
-          )}
-        </ContainerCarrinho>
-      </main>
-    </LayoutBase>
+                    </ContainerTituloEndereco>
+                    <ContainerInfosResumo>
+                      <ContainerInfo>
+                        <TextoInfo>Subtotal</TextoInfo>
+                        <ValorInfo>
+                          {formatarMoeda(carrinho.valorTotal)}
+                        </ValorInfo>
+                      </ContainerInfo>
+                      <ContainerInfo>
+                        <TextoInfo>Frete</TextoInfo>
+                        <ValorInfo style={{ color: colors.verde }}>
+                          GRÁTIS
+                        </ValorInfo>
+                      </ContainerInfo>
+                    </ContainerInfosResumo>
+                    <ContainerTotal>
+                      <TextoTotal>Valor Total</TextoTotal>
+                      <ValorTotal>
+                        {formatarMoeda(carrinho.valorTotal)}
+                      </ValorTotal>
+                    </ContainerTotal>
+                    <Botao
+                      corDeFundo={colors.primaria}
+                      corDeFundoHover={colors.primariaClara}
+                      mostrarBoxShadow={true}
+                      corTexto={colors.branco}
+                      fontFamily={fonte}
+                      fontSize={14}
+                      fontWeight={600}
+                      flexGrow={1}
+                      flexBasis={40}
+                      width="100%"
+                      height={40}
+                      tamanho="small"
+                      variante="contained"
+                      texto={isLoading ? "Aguarde..." : "Ir para o pagamento"}
+                      type="button"
+                      disabled={isLoading && true}
+                      aoClicar={irParaPagamento}
+                    />
+                  </ContainerResumo>
+                </ContainerDireito>
+              </ContainerEsquerdaDireita>
+            )}
+            {etapaPagamento && (
+              <ContainerResumoPagamento>
+                <ContainerTituloEndereco>
+                  <TituloResumo>Confirmar dados do pedido</TituloResumo>
+                  <ReadCvLogo size={20} weight="bold" color={colors.preto2} />
+                </ContainerTituloEndereco>
+                <ContainerResumoDados>
+                  <ContainerResumoDadosEsquerda>
+                    {carrinho.itensCarrinho.map((item, index) => (
+                      <ContainerItemResumo key={index}>
+                        <ContainerImagemResumo>
+                          <ImagemCarrinho
+                            src={item.imagens_variacao_produto[0]}
+                          />
+                        </ContainerImagemResumo>
+                        <ContainerInfosItemResumo>
+                          <NomeIitem>{item.nome_produto}</NomeIitem>
+                          <CorETamanho style={{ fontSize: 12 }}>
+                            Cor: {item.cor_variacao_produto} | Medida:{" "}
+                            {item.medida_variacao_produto} | Unidades:{" "}
+                            {item.quantidade}
+                          </CorETamanho>
+                          <PrecoItem style={{ fontSize: 12 }}>
+                            Preço unitário:{" "}
+                            {formatarMoeda(item.preco_venda_produto)}
+                          </PrecoItem>
+                        </ContainerInfosItemResumo>
+                      </ContainerItemResumo>
+                    ))}
+                  </ContainerResumoDadosEsquerda>
+                  <ContainerResumoDadosDireita>
+                    <ContainerEnderecoResumo>
+                      <TituloEnderecoResumo>
+                        Endereço de entrega
+                      </TituloEnderecoResumo>
+                      <TextoEnderecoResumo>
+                        {user?.endereco?.rua}, {user?.endereco?.complemento},{" "}
+                        {user?.endereco?.bairro}, {user?.endereco?.cidade}
+                      </TextoEnderecoResumo>
+                      <TextoEnderecoResumo>
+                        CEP: {user?.endereco?.cep}
+                      </TextoEnderecoResumo>
+                    </ContainerEnderecoResumo>
+                    <ContainerInfosValoresResumo>
+                      <TituloEnderecoResumo>
+                        Data estimada de entrega
+                      </TituloEnderecoResumo>
+                      <TextoEnderecoResumo>
+                        {user?.endereco?.cidade === "Goiânia" && (
+                          <>
+                            Receba seu pedido até dia{" "}
+                            {new Date(
+                              new Date().setDate(new Date().getDate() + 4)
+                            ).toLocaleDateString()}
+                          </>
+                        )}
+                        {user?.endereco?.cidade !== "Goiânia" && (
+                          <>
+                            Receba seu pedido até dia{" "}
+                            {new Date(
+                              new Date().setDate(new Date().getDate() + 15)
+                            ).toLocaleDateString()}
+                          </>
+                        )}
+                      </TextoEnderecoResumo>
+                    </ContainerInfosValoresResumo>
+                    <ContainerInfosValoresResumo>
+                      <TituloEnderecoResumo>Pagamento</TituloEnderecoResumo>
+                      <ContainerInfoResumo>
+                        <TextoInfo>Frete</TextoInfo>
+                        <ValorInfo style={{ color: colors.verde }}>
+                          GRÁTIS
+                        </ValorInfo>
+                      </ContainerInfoResumo>
+                      <ContainerInfoResumo>
+                        <TextoInfo>Valor Total</TextoInfo>
+                        <ValorTotal>
+                          {formatarMoeda(carrinho.valorTotal)}
+                        </ValorTotal>
+                      </ContainerInfoResumo>
+                    </ContainerInfosValoresResumo>
+                    <Wallet
+                      initialization={{ preferenceId: preferenceId }}
+                      customization={{ texts: { valueProp: "smart_option" } }}
+                    />
+                  </ContainerResumoDadosDireita>
+                </ContainerResumoDados>
+              </ContainerResumoPagamento>
+            )}
+          </>
+        )}
+        {carrinho.itensCarrinho.length === 0 && (
+          <ContainerCarrinhoVazio>
+            <TextoTituloCarrinhoVazio>
+              O seu carrinho está vazio
+            </TextoTituloCarrinhoVazio>
+            <TextoDescricaoCarrinhoVazio>
+              Adquira nossos melhores produtos!
+            </TextoDescricaoCarrinhoVazio>
+            <Botao
+              corDeFundo={colors.primaria}
+              corDeFundoHover={colors.primariaClara}
+              mostrarBoxShadow={true}
+              corTexto={colors.branco}
+              fontFamily={fonte}
+              fontSize={14}
+              fontWeight={600}
+              flexGrow={1}
+              flexBasis={40}
+              width={firstMediaQuery ? "75%" : "55%"}
+              height={40}
+              tamanho="small"
+              variante="contained"
+              texto="CONTINUAR COMPRANDO"
+              type="button"
+              aoClicar={() => navigate("/")}
+            />
+          </ContainerCarrinhoVazio>
+        )}
+      </ContainerCarrinho>
+    </main>
   );
 }

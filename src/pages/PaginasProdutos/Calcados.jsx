@@ -1,6 +1,6 @@
 import React from "react";
 import fundoCalcados from "../../assets/img/Calcados.png";
-import LayoutPaginaProdutos from "../../templates/LayoutPaginaProdutos";
+import LayoutPaginaProdutos from "./LayoutPaginasProdutos";
 
 export default function Calcados() {
   const categorias = ["Chinelos", "Sandálias", "Sapatos", "Tênis"];

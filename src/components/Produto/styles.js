@@ -12,6 +12,7 @@ export const ContainerProduct = styled.div`
   box-shadow: 1px 4px 12px 3px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   position: relative;
+  z-index: 0;
 
   @media (max-width: 500px) {
     min-width: 180px;
@@ -21,7 +22,6 @@ export const ContainerProduct = styled.div`
 export const ContainerLikeProduct = styled.div`
   display: flex;
   position: absolute;
-  z-index: 1;
   top: 0;
   right: 0;
   padding: 18px;
@@ -30,6 +30,8 @@ export const ContainerLikeProduct = styled.div`
   background-color: ${colors.primaria};
   transition: background-color 0.4s;
   cursor: pointer;
+  z-index: 2;
+
   &:hover {
     background-color: ${colors.primariaClara};
   }
@@ -43,6 +45,8 @@ export const ContainerImgProduct = styled.img`
   border-radius: 8px;
   transition: opacity 0.4s;
   cursor: pointer;
+  z-index: 1;
+
   &:hover {
     opacity: 0.8;
   }
