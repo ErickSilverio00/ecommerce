@@ -24,10 +24,10 @@ const useCarrinhoStore = create((set) => ({
     });
   },
 
-  atualizarQuantidadeItemCarrinho: (idItemCarrinho, novaQuantidade) => {
+  atualizarQuantidadeItemCarrinho: (id_variacao_produto, novaQuantidade) => {
     set((state) => {
       const novosItensCarrinho = state.itensCarrinho.map((item) =>
-        item.id_carrinho === idItemCarrinho
+        item.id_variacao_produto === id_variacao_produto
           ? { ...item, quantidade: novaQuantidade }
           : item
       );
@@ -42,10 +42,10 @@ const useCarrinhoStore = create((set) => ({
     });
   },
 
-  removerItemCarrinho: (idItemCarrinho) => {
+  removerItemCarrinho: (id_variacao_produto) => {
     set((state) => {
       const novosItensCarrinho = state.itensCarrinho.filter(
-        (item) => item.id_carrinho !== idItemCarrinho
+        (item) => item.id_variacao_produto !== id_variacao_produto
       );
       localStorage.setItem("itensCarrinho", JSON.stringify(novosItensCarrinho));
       return {

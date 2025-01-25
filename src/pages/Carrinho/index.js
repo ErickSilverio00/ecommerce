@@ -262,7 +262,7 @@ export default function Carrinho() {
                             <ContainerSelect
                               onChange={(e) =>
                                 alterarQuantidadeProduto(
-                                  item.id_carrinho,
+                                  item.id_variacao_produto,
                                   parseInt(e.target.value)
                                 )
                               }
@@ -280,7 +280,7 @@ export default function Carrinho() {
                           </ContainerInfosItemSegunda>
                           <ContainerInfosItemTerceira
                             onClick={() =>
-                              removerItemCarrinho(item.id_carrinho)
+                              removerItemCarrinho(item.id_variacao_produto)
                             }
                           >
                             <X

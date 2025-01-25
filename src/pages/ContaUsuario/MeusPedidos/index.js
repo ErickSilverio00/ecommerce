@@ -5,13 +5,11 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import Tooltip from "@mui/material/Tooltip";
 import { Gear, ShoppingCart, Truck, UserCircle } from "@phosphor-icons/react";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Botao from "../../../components/Botao";
-import { buscarComprasCliente } from "../../../services/PagamentoEcommerce";
-import useAuthStore from "../../../stores/useAuthStore";
+import useMeusPedidos from "../../../hooks/ContaUsuario/useMeusPedidos";
 import { colors } from "../../../styles/colors";
 import { fonte } from "../../../styles/global";
 import { formatarData, formatarMoeda } from "../../../utils/funcoes";
@@ -50,39 +48,8 @@ export default function MeusPedidos({
   aoApertarInicioNosMeusPedidos,
   aoApertarMeusDadosNosMeusPedidos,
 }) {
-  const { user } = useAuthStore();
+  const { listaCompras, aoClicarEmRastrear } = useMeusPedidos();
   const firstMediaQuery = useMediaQuery("(max-width: 440px)");
-  const [listaCompras, setListaCompras] = useState([]);
-
-  const buscarCompras = async () => {
-    try {
-      const response = await buscarComprasCliente(user.idCliente);
-      setListaCompras(response.informacoesVendas);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const aoClicarEmRastrear = (compra) => {
-    const urlCorreios = "https://www.correios.com.br/";
-
-    const numeroRastreio = compra.venda.numero_rastreio;
-
-    navigator.clipboard.writeText(numeroRastreio);
-
-    toast.success(
-      `Número de rastreamento copiado com sucesso: ${numeroRastreio}`
-    );
-
-    setTimeout(() => {
-      window.open(urlCorreios, "_blank", "noopener");
-    }, 1000);
-  };
-
-  useEffect(() => {
-    buscarCompras();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <ContainerMeusPedidos>

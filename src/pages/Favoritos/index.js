@@ -33,8 +33,12 @@ export default function Favoritos() {
               <Titulo>Favoritos</Titulo>
             </ContainerTitulo>
             <ContainerProdutosFavoritos>
-              {produtosCurtidos.produtosCurtidos.map((produto) => (
-                <Produto produto={produto} flex={firstMediaQuery ? 1 : 0.2} />
+              {produtosCurtidos.produtosCurtidos.map((produto, index) => (
+                <Produto
+                  key={index}
+                  produto={produto}
+                  flex={firstMediaQuery ? 1 : 0.2}
+                />
               ))}
             </ContainerProdutosFavoritos>
           </>

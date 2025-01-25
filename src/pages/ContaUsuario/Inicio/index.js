@@ -8,13 +8,11 @@ import {
   Truck,
   UserCircle,
 } from "@phosphor-icons/react";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Botao from "../../../components/Botao";
-import { buscarComprasCliente } from "../../../services/PagamentoEcommerce";
-import useAuthStore from "../../../stores/useAuthStore";
+import useInicio from "../../../hooks/ContaUsuario/useInicio";
 import { colors } from "../../../styles/colors";
 import { fonte } from "../../../styles/global";
 import { formatarData, formatarMoeda } from "../../../utils/funcoes";
@@ -52,38 +50,8 @@ export default function Inicio({
   aoApertarMeusDadosNoInicio,
   aoApertarMeusPedidosNoInicio,
 }) {
-  const { user } = useAuthStore();
+  const { user, listaCompras, aoClicarEmRastrear } = useInicio();
   const firstMediaQuery = useMediaQuery("(max-width: 500px)");
-  const [listaCompras, setListaCompras] = useState([]);
-
-  const buscarCompras = async () => {
-    try {
-      const response = await buscarComprasCliente(user.idCliente);
-      setListaCompras(response.informacoesVendas);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
-
-  const aoClicarEmRastrear = () => {
-    const urlCorreios = "https://www.correios.com.br/";
-
-    const numeroRastreio = listaCompras[0].venda.numero_rastreio;
-
-    navigator.clipboard.writeText(numeroRastreio);
-
-    toast.success(
-      `Número de rastreamento copiado com sucesso: ${numeroRastreio}`
-    );
-
-    setTimeout(() => {
-      window.open(urlCorreios, "_blank", "noopener");
-    }, 1000);
-  };
-
-  useEffect(() => {
-    buscarCompras();
-  }, []);
 
   return (
     <ContainerInicio>

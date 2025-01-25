@@ -4,7 +4,7 @@ import { jwtDecode } from "jwt-decode";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { criarSessaoCheckout } from "../../services/Carrinho";
+import { pagarComMercadoPago } from "../../services/PagamentoEcommerce";
 import useAuthStore from "../../stores/useAuthStore";
 import useCarrinhoStore from "../../stores/useCarrinhoStore";
 import { makeValidation } from "../../utils/funcoes";
@@ -97,10 +97,24 @@ export default function useCarrinho() {
     }
   };
 
-  const removerItemCarrinho = (item) => {
+  const alterarQuantidadeProduto = async (
+    id_variacao_produto,
+    novaQuantidade
+  ) => {
+    try {
+      await carrinho.atualizarQuantidadeItemCarrinho(
+        id_variacao_produto,
+        novaQuantidade
+      );
+    } catch (error) {
+      toast.error(`Erro ao alterar a quantidade do produto: ${error}`);
+    }
+  };
+
+  const removerItemCarrinho = (id_variacao_produto) => {
     try {
       setIsLoading(true);
-      carrinho.removerItemCarrinho(item);
+      carrinho.removerItemCarrinho(id_variacao_produto);
     } catch (error) {
       toast.error(error);
     } finally {
@@ -108,32 +122,37 @@ export default function useCarrinho() {
     }
   };
 
-  const alterarQuantidadeProduto = async (idCarrinho, novaQuantidade) => {
-    try {
-      await carrinho.atualizarQuantidadeItemCarrinho(
-        idCarrinho,
-        novaQuantidade
-      );
-      carrinho.fetchItensCarrinho(user.idCliente);
-    } catch (error) {
-      toast.error(`Erro ao alterar a quantidade do produto: ${error}`);
-    }
-  };
-
   const irParaPagamento = async () => {
     try {
-      const objetoEnvio = {
-        carrinho: carrinho.itensCarrinho,
-        cliente: user.idCliente,
+      const preference = {
+        items: carrinho.itensCarrinho.map((item) => ({
+          title: item.nome_produto,
+          unit_price: item.preco_venda_produto,
+          quantity: item.quantidade,
+          currency_id: "BRL",
+        })),
+        payer: {
+          name: user.userName,
+          email: user.userEmail,
+        },
+        back_urls: {
+          success: "http://localhost:3000/carrinho/pagamento-concluido",
+          failure: "http://localhost:3000/carrinho/pagamento-falhou",
+          pending: "http://localhost:3000/carrinho/pagamento-concluido",
+        },
+        auto_return: "approved",
       };
+
       setIsLoading(true);
-      const url = await criarSessaoCheckout(objetoEnvio);
-      setPreferenceId(url.data.id);
+
+      const response = await pagarComMercadoPago(preference);
+
+      setPreferenceId(response.id);
       setEtapaPagamento(true);
       setEtapaCarrinho(false);
       setIsLoading(false);
     } catch (error) {
-      toast.error(`Erro ao criar sessão de checkout: ${error}`);
+      toast.error(`Erro ao criar sessão de checkout: ${error.message}`);
     } finally {
       setIsLoading(false);
     }

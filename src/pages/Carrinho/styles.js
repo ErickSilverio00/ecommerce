@@ -443,22 +443,13 @@ export const ContainerResumoPagamento = styled.div`
   display: flex;
   flex-direction: column;
   margin: 0 auto;
-  width: 60%;
   min-height: min-content;
-  padding: 20px;
+  padding: 20px 60px;
   background-color: #f9fafb;
   border-radius: 4px;
 
-  @media (max-width: 1170px) {
-    width: 70%;
-  }
-
-  @media (max-width: 1040px) {
-    width: 80%;
-  }
-
-  @media (max-width: 400px) {
-    width: 90%;
+  @media (max-width: 980px) {
+    padding: 20px;
   }
 `;
 

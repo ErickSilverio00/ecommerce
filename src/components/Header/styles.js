@@ -164,6 +164,10 @@ export const ItemListaDeBuscas = styled.li`
   &:hover {
     background-color: ${colors.cinzaSuperClaro};
   }
+
+  &.selected {
+    background-color: ${colors.cinzaSuperClaro};
+  }
 `;
 
 export const ImgItem = styled.img`

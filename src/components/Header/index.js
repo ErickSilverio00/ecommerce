@@ -61,6 +61,7 @@ export default function Header() {
   const [searchResults, setSearchResults] = useState([]);
   const [estaBuscando, setEstabuscando] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(-1);
   const searchContainerRef = useRef(null);
   const inputRef = useRef(null);
   const { produtos, buscarProdutos } = useProdutos();
@@ -198,12 +199,24 @@ export default function Header() {
     }
   };
 
-  const handleKeyPress = (event) => {
-    if (event.key === "Enter" && searchInput.length >= 3) {
-      navigate(`/busca/${searchInput}`);
-      aoClicarNoProdutoEscolhido();
-      if (inputRef.current) {
-        inputRef.current.blur();
+  const handleKeyPress = (e) => {
+    if (searchResults.length > 0) {
+      if (e.key === "ArrowDown") {
+        e.preventDefault(); // Evitar que a página role
+        setSelectedIndex((prevIndex) =>
+          prevIndex < searchResults.length - 1 ? prevIndex + 1 : 0
+        );
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        setSelectedIndex((prevIndex) =>
+          prevIndex > 0 ? prevIndex - 1 : searchResults.length - 1
+        );
+      } else if (e.key === "Enter" && selectedIndex >= 0) {
+        // Quando pressionar Enter, redirecionar para a opção selecionada
+        const selectedItem = searchResults[selectedIndex];
+        if (selectedItem) {
+          window.location.href = `/produto/${selectedItem.nome_produto}`;
+        }
       }
     }
   };
@@ -211,22 +224,6 @@ export default function Header() {
   const sairDoSistema = () => {
     logout();
     window.location.reload();
-  };
-
-  const updateNumeroItensCarrinho = async () => {
-    try {
-      await carrinho.fetchItensCarrinho(user.idCliente);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const updateNumeroItensCurtidos = async () => {
-    try {
-      await produtosCurtidos.fetchProdutosCurtidos(user.idCliente);
-    } catch (error) {
-      console.error(error);
-    }
   };
 
   useEffect(() => {
@@ -248,14 +245,6 @@ export default function Header() {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, []);
-
-  useEffect(() => {
-    if (user) {
-      updateNumeroItensCarrinho();
-      updateNumeroItensCurtidos();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -304,7 +293,10 @@ export default function Header() {
                     onClick={aoClicarNoProdutoEscolhido}
                     key={index}
                   >
-                    <ItemListaDeBuscas key={index}>
+                    <ItemListaDeBuscas
+                      key={index}
+                      className={index === selectedIndex ? "selected" : ""}
+                    >
                       <ImgItem
                         src={result.variacoes[0].imagens_variacao_produto[0]}
                         alt={result.nome_produto}
