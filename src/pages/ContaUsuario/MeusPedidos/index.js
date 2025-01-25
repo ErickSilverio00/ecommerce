@@ -1,7 +1,21 @@
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { IconButton, useMediaQuery } from "@mui/material";
+import Accordion from "@mui/material/Accordion";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import Tooltip from "@mui/material/Tooltip";
+import { Gear, ShoppingCart, Truck, UserCircle } from "@phosphor-icons/react";
 import React, { useEffect, useState } from "react";
-import { ShoppingCart, Gear } from "@phosphor-icons/react";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Botao from "../../../components/Botao";
+import { buscarComprasCliente } from "../../../services/PagamentoEcommerce";
+import useAuthStore from "../../../stores/useAuthStore";
+import { colors } from "../../../styles/colors";
+import { fonte } from "../../../styles/global";
+import { formatarData, formatarMoeda } from "../../../utils/funcoes";
+import { ContainerEndereco } from "../Inicio/styles";
 import {
   BlocoFinal,
   ContainerBlocoNav,
@@ -31,29 +45,13 @@ import {
   TituloMeusPedidos,
   TituloNaoTevePedido,
 } from "./styles";
-import { buscarComprasCliente } from "../../../services/PagamentoEcommerce";
-import useAuthStore from "../../../stores/useAuthStore";
-import { formatarData, formatarMoeda } from "../../../utils/funcoes";
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { ContainerEndereco } from "../Inicio/styles";
-import { useMediaQuery, IconButton } from "@mui/material";
-import Tooltip from "@mui/material/Tooltip";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { Truck } from "@phosphor-icons/react";
-import { colors } from "../../../styles/colors";
-import { fonte } from "../../../styles/global";
 
 export default function MeusPedidos({
   aoApertarInicioNosMeusPedidos,
   aoApertarMeusDadosNosMeusPedidos,
 }) {
   const { user } = useAuthStore();
-  const firstMediaQuery = useMediaQuery("(max-width: 772px)");
-  const secondMediaQuery = useMediaQuery("(max-width: 440px)");
+  const firstMediaQuery = useMediaQuery("(max-width: 440px)");
   const [listaCompras, setListaCompras] = useState([]);
 
   const buscarCompras = async () => {
@@ -92,26 +90,24 @@ export default function MeusPedidos({
         <ShoppingCart size={32} weight="bold" color={colors.preto2} />
         <TituloMeusPedidos>Meus pedidos</TituloMeusPedidos>
       </ContainerTituloMeusPedidos>
-      {firstMediaQuery && (
-        <ContainerNav>
-          <ContainerBlocoNav onClick={aoApertarInicioNosMeusPedidos}>
-            <Gear
-              size={secondMediaQuery ? 28 : 48}
-              weight="bold"
-              color={colors.preto2}
-            />
-            <TextoMeusPedidos>Início</TextoMeusPedidos>
-          </ContainerBlocoNav>
-          <ContainerBlocoNav onClick={aoApertarMeusDadosNosMeusPedidos}>
-            <ShoppingCart
-              size={secondMediaQuery ? 28 : 48}
-              weight="bold"
-              color={colors.preto2}
-            />
-            <TextoMeusPedidos>Meus dados</TextoMeusPedidos>
-          </ContainerBlocoNav>
-        </ContainerNav>
-      )}
+      <ContainerNav>
+        <ContainerBlocoNav onClick={aoApertarInicioNosMeusPedidos}>
+          <UserCircle
+            size={firstMediaQuery ? 28 : 48}
+            weight="bold"
+            color={colors.preto2}
+          />
+          <TextoMeusPedidos>Início</TextoMeusPedidos>
+        </ContainerBlocoNav>
+        <ContainerBlocoNav onClick={aoApertarMeusDadosNosMeusPedidos}>
+          <Gear
+            size={firstMediaQuery ? 28 : 48}
+            weight="bold"
+            color={colors.preto2}
+          />
+          <TextoMeusPedidos>Meus dados</TextoMeusPedidos>
+        </ContainerBlocoNav>
+      </ContainerNav>
       {listaCompras.length > 0 && (
         <ContainerPedidos>
           {listaCompras.map((compra) => (

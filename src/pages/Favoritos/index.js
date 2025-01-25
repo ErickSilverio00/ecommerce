@@ -3,7 +3,7 @@ import { Heart } from "@phosphor-icons/react";
 import { useNavigate } from "react-router-dom";
 import Botao from "../../components/Botao";
 import Produto from "../../components/Produto";
-import useProdutosCurtidos from "../../stores/useProdutosCurtidos";
+import useProdutosCurtidosStore from "../../stores/useProdutosCurtidosStore";
 import { colors } from "../../styles/colors";
 import { fonte } from "../../styles/global";
 import {
@@ -20,7 +20,7 @@ import {
 
 export default function Favoritos() {
   const firstMediaQuery = useMediaQuery("(max-width: 672px)");
-  const produtosCurtidos = useProdutosCurtidos();
+  const produtosCurtidos = useProdutosCurtidosStore();
   const navigate = useNavigate();
 
   return (

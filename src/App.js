@@ -22,8 +22,23 @@ function App() {
         localStorage.removeItem("accessToken");
         logout();
       } else {
-        const { email_cliente, userName, idCliente, endereco } = decodedToken;
-        login(accessToken, email_cliente, userName, idCliente, endereco);
+        const {
+          email_cliente,
+          userName,
+          idCliente,
+          telefone,
+          dataNascimento,
+          endereco,
+        } = decodedToken;
+        login(
+          accessToken,
+          email_cliente,
+          userName,
+          idCliente,
+          telefone,
+          dataNascimento,
+          endereco
+        );
       }
     };
 

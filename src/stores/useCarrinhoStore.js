@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-const useCarrinho = create((set) => ({
+const useCarrinhoStore = create((set) => ({
   itensCarrinho: JSON.parse(localStorage.getItem("itensCarrinho")) || [],
   numeroItens: JSON.parse(localStorage.getItem("itensCarrinho"))?.length || 0,
   valorTotal:
@@ -69,4 +69,4 @@ const useCarrinho = create((set) => ({
   },
 }));
 
-export default useCarrinho;
+export default useCarrinhoStore;

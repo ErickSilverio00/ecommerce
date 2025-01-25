@@ -1,17 +1,20 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { initMercadoPago } from "@mercadopago/sdk-react";
+import { jwtDecode } from "jwt-decode";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { criarSessaoCheckout } from "../../services/Carrinho";
 import useAuthStore from "../../stores/useAuthStore";
-import useCarrinho from "../../stores/useCarrinho";
+import useCarrinhoStore from "../../stores/useCarrinhoStore";
+import { makeValidation } from "../../utils/funcoes";
+import { validationEnderecoSchema } from "./schema";
 
 const token = process.env.REACT_APP_MERCADO_PAGO_PUBLIC_KEY;
 
-export default function useHookCarrinho() {
+export default function useCarrinho() {
   const { user } = useAuthStore();
-  const carrinho = useCarrinho();
+  const carrinho = useCarrinhoStore();
   const navigate = useNavigate();
   const formEnderecoRef = useRef(null);
   const [preferenceId, setPreferenceId] = useState("");
@@ -32,41 +35,41 @@ export default function useHookCarrinho() {
     setEdicaoEnderecoAtiva(true);
   };
 
-  const validarEndereco = async (formData) => {
-    if (formData.rua === "") {
-      formEnderecoRef.current.setFieldError("rua", "Campo Obrigatório");
-      return false;
-    }
-    if (formData.complemento === "") {
-      formEnderecoRef.current.setFieldError("complemento", "Campo Obrigatório");
-      return false;
-    }
-    if (formData.bairro === "") {
-      formEnderecoRef.current.setFieldError("bairro", "Campo Obrigatório");
-      return false;
-    }
-    if (formData.cep === "") {
-      formEnderecoRef.current.setFieldError("cep", "Campo Obrigatório");
-      return false;
-    }
-    if (formData.cidade === "") {
-      formEnderecoRef.current.setFieldError("cidade", "Campo Obrigatório");
-      return false;
-    }
-
-    return true;
-  };
-
   const atualizarEndereco = async () => {
     const formData = formEnderecoRef?.current?.getData();
-    const enderecoValido = await validarEndereco(formData);
-    if (enderecoValido) {
+
+    const isValid = await makeValidation(
+      validationEnderecoSchema,
+      formData,
+      formEnderecoRef
+    );
+    if (!isValid) {
       return;
     }
 
     try {
-      const params = {
-        id_cliente: user.idCliente,
+      useAuthStore
+        .getState()
+        .login(
+          useAuthStore.getState().user.accessToken,
+          useAuthStore.getState().user.userEmail,
+          useAuthStore.getState().user.userName,
+          useAuthStore.getState().user.idCliente,
+          useAuthStore.getState().user.telefone,
+          useAuthStore.getState().user.dataNascimento,
+          {
+            ...useAuthStore.getState().user.endereco,
+            rua: formData.rua,
+            complemento: formData.complemento,
+            bairro: formData.bairro,
+            cep: formData.cep,
+            cidade: formData.cidade,
+          }
+        );
+
+      const decodedToken = jwtDecode(useAuthStore.getState().user.accessToken);
+
+      decodedToken.endereco = {
         rua: formData.rua,
         complemento: formData.complemento,
         bairro: formData.bairro,
@@ -74,17 +77,23 @@ export default function useHookCarrinho() {
         cidade: formData.cidade,
       };
 
-      // const response = await atualizarEnderecoEcommerce(
-      //   params.id_cliente,
-      //   params
-      // );
-      // if (response.mensagem === "Endereço atualizado com sucesso") {
-      //   buscarDadosCliente();
-      //   toast.success("Seu endereço foi atualizado com sucesso.");
-      //   setEdicaoEnderecoAtiva(false);
-      // }
+      const header = btoa(JSON.stringify({ alg: "HS256", typ: "JWT" }));
+      const payload = btoa(
+        JSON.stringify({
+          ...decodedToken,
+        })
+      );
+
+      const signature = btoa("simulated_signature");
+
+      const updatedAccessToken = `${header}.${payload}.${signature}`;
+
+      localStorage.setItem("accessToken", updatedAccessToken);
+
+      toast.success("Endereço atualizado com sucesso!");
+      setEdicaoEnderecoAtiva(false);
     } catch (error) {
-      toast.error(`Erro ao atualizar seu endereço, tente novamente.`);
+      toast.error("Erro ao atualizar seu endereço, tente novamente.");
     }
   };
 
@@ -152,7 +161,6 @@ export default function useHookCarrinho() {
     edicaoEnderecoAtiva,
     setEdicaoEnderecoAtiva,
     aoMudarParaEdicaoEndereco,
-    validarEndereco,
     atualizarEndereco,
     removerItemCarrinho,
     alterarQuantidadeProduto,

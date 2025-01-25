@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import useAuthStore from "../../stores/useAuthStore";
-import useProdutosCurtidos from "../../stores/useProdutosCurtidos";
+import useProdutosCurtidosStore from "../../stores/useProdutosCurtidosStore";
 import { colors } from "../../styles/colors";
 import { fonte } from "../../styles/global";
 import { formatarMedidas, formatarMoeda } from "../../utils/funcoes";
@@ -25,7 +25,7 @@ import {
 export default function Produto({ produto, flex }) {
   const { user } = useAuthStore();
   const navigate = useNavigate();
-  const produtosCurtidos = useProdutosCurtidos();
+  const produtosCurtidos = useProdutosCurtidosStore();
   const [liked, setLiked] = useState(false);
 
   useEffect(() => {

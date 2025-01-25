@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { fetchProdutos } from "../services/Produtos";
 
-const useProduto = create((set) => ({
+const useProdutosStore = create((set) => ({
   produtos: [],
   adicionarProduto: (produtoData) =>
     set((state) => ({ produtos: [...state.produtos, produtoData] })),
@@ -26,4 +26,4 @@ const useProduto = create((set) => ({
   },
 }));
 
-export default useProduto;
+export default useProdutosStore;

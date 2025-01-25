@@ -14,7 +14,7 @@ import { Link } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import Botao from "../../components/Botao";
 import CampoTexto from "../../components/CampoTexto";
-import useHookCarrinho from "../../hooks/Carrinho/useHookCarrinho";
+import useCarrinho from "../../hooks/Carrinho/useCarrinho";
 import { colors } from "../../styles/colors";
 import { AreaItem, fonte } from "../../styles/global";
 import { formatarMoeda } from "../../utils/funcoes";
@@ -94,7 +94,7 @@ export default function Carrinho() {
     removerItemCarrinho,
     alterarQuantidadeProduto,
     irParaPagamento,
-  } = useHookCarrinho();
+  } = useCarrinho();
 
   return (
     <main>

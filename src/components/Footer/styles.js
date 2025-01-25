@@ -5,6 +5,10 @@ import { fonte } from "../../styles/global";
 export const ContainerFooter = styled.footer`
   display: flex;
   flex-direction: column;
+  position: ${(props) => (props.isFixed ? "absolute" : "relative")};
+  bottom: 0;
+  left: 0;
+  width: 100%;
 `;
 
 export const FirstLine = styled.div`
@@ -13,7 +17,7 @@ export const FirstLine = styled.div`
   align-items: center;
   justify-content: center;
   padding-block: 60px;
-  gap: 110px;
+  gap: 80px;
   background-color: ${colors.cinzaSuperClaro};
 
   @media (max-width: 1200px) {

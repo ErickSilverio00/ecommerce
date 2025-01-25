@@ -12,7 +12,7 @@ export const MainCadastro = styled.main`
 
   @media (max-width: 500px) {
     margin-top: 63px;
-    padding: 30px;
+    padding: 0px;
   }
 `;
 
@@ -97,12 +97,8 @@ export const ContainerCadastrado = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 700px;
+  text-align: center;
   padding: 30px;
-
-  @media (max-width: 500px) {
-    width: 100%;
-  }
 `;
 
 export const ContainerMsgTitulo = styled.div`
@@ -110,12 +106,16 @@ export const ContainerMsgTitulo = styled.div`
   gap: 20px;
   justify-content: center;
   align-items: center;
+
+  @media (max-width: 500px) {
+    flex-direction: column;
+  }
 `;
 
 export const MsgTitulo = styled.h2`
   display: flex;
   font-family: ${fonte};
-  font-size: 36px;
+  font-size: 24px;
   font-weight: bold;
   color: ${colors.preto2};
   margin: 0;
@@ -130,8 +130,12 @@ export const DescricaoCadastro = styled.p`
   margin: 0 auto;
   justify-content: center;
   text-align: center;
-  width: 70%;
   margin-top: 40px;
+  width: 70%;
+
+  @media (max-width: 500px) {
+    width: 100%;
+  }
 `;
 
 export const ContainerBotaoLogin = styled.div`
@@ -139,5 +143,4 @@ export const ContainerBotaoLogin = styled.div`
   flex-direction: column;
   margin: 0 auto;
   padding-top: 40px;
-  width: 50%;
 `;

@@ -13,20 +13,41 @@ const loadUserFromLocalStorage = () => {
     return null;
   }
 
-  const { userEmail, userName, idCliente, endereco } = decodedToken;
+  const { userEmail, userName, telefone, dataNascimento, idCliente, endereco } =
+    decodedToken;
   return {
     accessToken: storedAccessToken,
     userEmail,
     userName,
     idCliente,
+    telefone,
+    dataNascimento,
     endereco,
   };
 };
 
 const useAuthStore = create((set) => ({
   user: loadUserFromLocalStorage(),
-  login: (accessToken, userEmail, userName, idCliente, endereco) => {
-    set({ user: { accessToken, userEmail, userName, idCliente, endereco } });
+  login: (
+    accessToken,
+    userEmail,
+    userName,
+    idCliente,
+    telefone,
+    dataNascimento,
+    endereco
+  ) => {
+    set({
+      user: {
+        accessToken,
+        userEmail,
+        userName,
+        idCliente,
+        telefone,
+        dataNascimento,
+        endereco,
+      },
+    });
     localStorage.setItem("accessToken", accessToken);
   },
   logout: () => {

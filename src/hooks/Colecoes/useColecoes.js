@@ -106,6 +106,13 @@ export default function useColecoes() {
   }, [swiperRefs]);
 
   useEffect(() => {
+    const initialArrowStates = sections.reduce((acc, section) => {
+      acc[section.key] = { left: false, right: true };
+      return acc;
+    }, {});
+
+    setArrowStates(initialArrowStates);
+
     loadProducts();
   }, []);
 

@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-const useProdutosCurtidos = create((set) => ({
+const useProdutosCurtidosStore = create((set) => ({
   produtosCurtidos: JSON.parse(localStorage.getItem("produtosCurtidos")) || [],
   numeroItens:
     JSON.parse(localStorage.getItem("produtosCurtidos"))?.length || 0,
@@ -39,4 +39,4 @@ const useProdutosCurtidos = create((set) => ({
   },
 }));
 
-export default useProdutosCurtidos;
+export default useProdutosCurtidosStore;

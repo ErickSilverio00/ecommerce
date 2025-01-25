@@ -1,51 +1,52 @@
-import React, { useEffect, useState } from "react";
-import {
-  House,
-  UserCircle,
-  Gear,
-  ShoppingCart,
-  Truck,
-} from "@phosphor-icons/react";
-import { Link } from "react-router-dom";
-import Botao from "../../../components/Botao";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { IconButton, useMediaQuery } from "@mui/material";
 import Tooltip from "@mui/material/Tooltip";
 import {
+  Gear,
+  House,
+  ShoppingCart,
+  Truck,
+  UserCircle,
+} from "@phosphor-icons/react";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Botao from "../../../components/Botao";
+import { buscarComprasCliente } from "../../../services/PagamentoEcommerce";
+import useAuthStore from "../../../stores/useAuthStore";
+import { colors } from "../../../styles/colors";
+import { fonte } from "../../../styles/global";
+import { formatarData, formatarMoeda } from "../../../utils/funcoes";
+import {
+  ContainerBlocoPedido,
   ContainerBoasVindas,
+  ContainerEndereco,
   ContainerImgPerfil,
   ContainerInicio,
+  ContainerItem,
   ContainerLadoDireito,
   ContainerLadoEsquerdo,
   ContainerMeusDados,
   ContainerNaoTevePedido,
   ContainerNav,
+  ContainerPedido,
   ContainerPrimeirosItens,
+  ContainerTevePedido,
   ContainerTituloDaSecao,
+  ContainerTituloTevePedido,
   ContainerUltimoPedido,
+  DescricaoItem,
   DescricaoNaoTevePedido,
+  LinhaDiv,
   TextoBoasVindas,
   TextoEmail,
   TextoMeusDados,
   TituloDaSecao,
-  TituloNaoTevePedido,
-  ContainerTevePedido,
-  ContainerTituloTevePedido,
-  TituloTevePedido,
-  ContainerPedido,
-  ContainerBlocoPedido,
-  LinhaDiv,
-  ContainerItem,
   TituloItem,
-  DescricaoItem,
-  ContainerEndereco,
+  TituloNaoTevePedido,
+  TituloTevePedido,
 } from "./styles";
-import { useMediaQuery, IconButton } from "@mui/material";
-import useAuthStore from "../../../stores/useAuthStore";
-import { buscarComprasCliente } from "../../../services/PagamentoEcommerce";
-import { formatarData, formatarMoeda } from "../../../utils/funcoes";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { colors } from "../../../styles/colors";
-import { fonte } from "../../../styles/global";
 
 export default function Inicio({
   aoApertarMeusDadosNoInicio,
@@ -60,7 +61,7 @@ export default function Inicio({
       const response = await buscarComprasCliente(user.idCliente);
       setListaCompras(response.informacoesVendas);
     } catch (error) {
-      console.error(error);
+      toast.error(error);
     }
   };
 
@@ -82,7 +83,6 @@ export default function Inicio({
 
   useEffect(() => {
     buscarCompras();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

@@ -84,7 +84,7 @@ export const TituloBloco = styled.p`
   margin: 0;
 `;
 
-export const ContainerFormularioDadosCadastrais = styled.form`
+export const ContainerFormularioDadosCadastrais = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 20px;
@@ -159,7 +159,7 @@ export const ContainerSairEdicaoEndereco = styled.div`
   cursor: pointer;
 `;
 
-export const ContainerFormularioEdicaoEndereco = styled.form`
+export const ContainerFormularioEdicaoEndereco = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 20px;

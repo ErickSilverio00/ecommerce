@@ -14,12 +14,13 @@ export default function useCadastro() {
 
     const clienteData = {
       nome: formData.nome,
-      cpf: formData.cpf,
       data_nascimento: dataNascimento,
       telefone: formData.telefone,
       email: formData.email,
       data_cadastro_cliente: new Date(),
       origem_cliente: "ecommerce",
+      senha: formData.senha,
+      confirmarSenha: formData.confirmarSenha,
     };
 
     try {

@@ -20,9 +20,9 @@ import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logoMC from "../../assets/img/logoMatheusCalcados2.png";
 import useAuthStore from "../../stores/useAuthStore";
-import useCarrinho from "../../stores/useCarrinho";
-import useProdutos from "../../stores/useProdutos";
-import useProdutosCurtidos from "../../stores/useProdutosCurtidos";
+import useCarrinhoStore from "../../stores/useCarrinhoStore";
+import useProdutosCurtidos from "../../stores/useProdutosCurtidosStore";
+import useProdutos from "../../stores/useProdutosStore";
 import { colors } from "../../styles/colors";
 import {
   ContainerBotaoBuscar,
@@ -64,7 +64,7 @@ export default function Header() {
   const searchContainerRef = useRef(null);
   const inputRef = useRef(null);
   const { produtos, buscarProdutos } = useProdutos();
-  const carrinho = useCarrinho();
+  const carrinho = useCarrinhoStore();
   const produtosCurtidos = useProdutosCurtidos();
 
   const listaDeItens = [
@@ -444,7 +444,7 @@ export default function Header() {
               </ContainerContadorItens>
             )}
           </Link>
-          {thirdMediaQuery && (
+          {firstMediaQuery && (
             <div>
               <Button
                 onClick={toggleDrawer(true)}

@@ -31,6 +31,8 @@ export default function useCamposLogin() {
           email_cliente: formData.email,
           userName: "Seu nome",
           idCliente: "12345",
+          telefone: "(62) 99999-9999",
+          dataNascimento: "2000/10/22",
           endereco: {
             rua: "Rua Teste",
             complemento: "Apto 101",
@@ -49,11 +51,26 @@ export default function useCamposLogin() {
       localStorage.setItem("accessToken", accessToken);
 
       const decodedToken = jwtDecode(accessToken);
-      const { email_cliente, userName, idCliente } = decodedToken;
+      const {
+        email_cliente,
+        userName,
+        idCliente,
+        telefone,
+        dataNascimento,
+        endereco,
+      } = decodedToken;
 
       useAuthStore
         .getState()
-        .login(accessToken, email_cliente, userName, idCliente);
+        .login(
+          accessToken,
+          email_cliente,
+          userName,
+          idCliente,
+          telefone,
+          dataNascimento,
+          endereco
+        );
 
       navigate("/");
       window.location.reload();

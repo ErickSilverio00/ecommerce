@@ -50,9 +50,6 @@ export default function Cadastro() {
                 <CampoTexto name="nome" label="Nome completo" />
               </AreaItem>
               <AreaItem wd="48">
-                <CampoTexto name="cpf" label="CPF" />
-              </AreaItem>
-              <AreaItem wd="48">
                 <DateTimePicker
                   name="data_nascimento"
                   label="Data de nascimento*"

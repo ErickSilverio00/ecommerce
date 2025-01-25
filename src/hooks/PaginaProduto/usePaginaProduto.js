@@ -3,8 +3,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { fetchProdutos } from "../../services/Produtos";
 import useAuthStore from "../../stores/useAuthStore";
-import useCarrinho from "../../stores/useCarrinho";
-import useProdutosCurtidos from "../../stores/useProdutosCurtidos";
+import useCarrinhoStore from "../../stores/useCarrinhoStore";
+import useProdutosCurtidos from "../../stores/useProdutosCurtidosStore";
 
 export default function usePaginaProduto() {
   const { name } = useParams();
@@ -21,7 +21,7 @@ export default function usePaginaProduto() {
   const [imagemSelecionada, setImagemSelecionada] = useState(null);
   const [tamanhoSelecionado, setTamanhoSelecionado] = useState([]);
   const [cepCalculado, setCepCalculado] = useState(false);
-  const carrinho = useCarrinho();
+  const carrinho = useCarrinhoStore();
   const produtosCurtidos = useProdutosCurtidos();
 
   async function loadProducts() {
