@@ -14,7 +14,7 @@ export const mockProdutos = [
     variacoes: [
       {
         id_variacao_produto: 100,
-        cor_variacao_produto: "Azul",
+        cor_variacao_produto: "Preto",
         medida_variacao_produto: "M",
         imagens_variacao_produto: [
           "https://firebasestorage.googleapis.com/v0/b/matheus-calcados.appspot.com/o/imagens%2FCamisa-Compressao.jpeg?alt=media",

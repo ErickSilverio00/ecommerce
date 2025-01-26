@@ -496,6 +496,10 @@ export const ContainerImagemResumo = styled.div`
   &:hover {
     opacity: 0.8;
   }
+
+  @media (max-width: 600px) {
+    width: 18%;
+  }
 `;
 
 export const ContainerInfosItemResumo = styled.div`
@@ -503,6 +507,10 @@ export const ContainerInfosItemResumo = styled.div`
   flex-direction: column;
   gap: 5px;
   margin-left: 20px;
+
+  @media (max-width: 600px) {
+    width: 100%;
+  }
 `;
 
 export const ContainerInfosItemQtdeResumo = styled.div`

@@ -501,7 +501,12 @@ export default function Header() {
                       </>
                     )}
                     {!user && (
-                      <ContainerItem onClick={() => navigate("/login")}>
+                      <ContainerItem
+                        onClick={() => [
+                          navigate("/login"),
+                          setDrawerOpen(false),
+                        ]}
+                      >
                         <SignIn size={24} color={colors.preto2} />
                         <TextoItens>Entrar</TextoItens>
                       </ContainerItem>
