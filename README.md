@@ -1,70 +1,102 @@
-# Getting Started with Create React App
+# Matheus Calçados - Template de E-commerce 🛍️
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Este é um projeto de estudo desenvolvido para a loja fictícia **Matheus Calçados**. O objetivo foi criar um template de e-commerce funcional utilizando **React.js**, simulando todas as funcionalidades essenciais de um e-commerce real. 
 
-## Available Scripts
+O projeto não possui backend e utiliza mocks de produtos e **Local Storage** para persistência local. Além disso, conta com a integração de teste do **Mercado Pago** para pagamentos fake.
 
-In the project directory, you can run:
+---
 
-### `npm start`
+## 🌟 Funcionalidades Principais
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **Home com Banner**: Uma página inicial atrativa com destaque para banners promocionais.
+- **Busca de Produtos**: Pesquisa de produtos com filtros por categoria e palavras-chave.
+- **Categorias**: Produtos organizados por categorias.
+- **Favoritos**: Adição e remoção de produtos na lista de favoritos.
+- **Carrinho de Compras**: Adicionar, remover e gerenciar produtos no carrinho.
+- **Conta do Usuário**: Gerenciamento de dados simulados do usuário.
+- **Pagamentos Fake**: Simulação de pagamentos utilizando o SDK do Mercado Pago.
+- **Persistência Local**: Dados salvos no navegador via Local Storage.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+---
 
-### `npm test`
+## 📂 Estrutura de Pastas
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+A estrutura de pastas do projeto foi organizada para facilitar a escalabilidade e a manutenção:
 
-### `npm run build`
+- **`assets`**: Arquivos estáticos, como imagens e ícones.
+- **`components`**: Componentes reutilizáveis da interface.
+- **`hooks`**: Hooks personalizados para gerenciamento de estado e lógica.
+- **`mocks`**: Dados mockados de produtos e categorias.
+- **`pages`**: Páginas principais do e-commerce.
+- **`routes`**: Configuração das rotas do React Router.
+- **`services`**: Serviços e integrações, como o Mercado Pago.
+- **`stores`**: Gerenciamento de estado utilizando a biblioteca Zustand.
+- **`styles`**: Estilos globais e temas.
+- **`templates`**: Estruturas de layout reutilizáveis.
+- **`utils`**: Funções utilitárias para lógica do projeto.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+---
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 🚀 Tecnologias e Bibliotecas
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### **Frontend**
+- **React.js**: Biblioteca principal para construção da interface.
+- **React Router Dom**: Gerenciamento de rotas.
+- **Styled Components**: Estilização dos componentes.
+- **Material-UI (MUI)**: Componentes visuais modernos e responsivos.
+- **Swiper**: Slider/carrossel para banners.
+- **Yup**: Validação de formulários.
+- **React Toastify**: Exibição de notificações.
+- **Zustand**: Gerenciamento de estado leve e eficiente.
+- **Lottie React**: Animações utilizando arquivos JSON.
 
-### `npm run eject`
+### **Integrações**
+- **Mercado Pago**: SDK para simulação de pagamentos.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### **Testes**
+- **@testing-library/react**: Biblioteca para testes de componentes React.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+---
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## 🛠️ Instalação e Execução
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### Pré-requisitos:
+- Node.js 18+
+- Gerenciador de pacotes (NPM ou Yarn)
 
-## Learn More
+### Passos para executar:
+1. Clone o repositório:
+   ```bash
+   git clone https://github.com/seu-usuario/seu-repositorio.git
+   cd seu-repositorio
+   ```
+2. Instale as dependências:
+    ```bash
+    npm install
+    ```
+3. Configure as variáveis de ambiente: Crie um arquivo .env na raiz do projeto com as seguintes variáveis:
+    ```bash
+    REACT_APP_MERCADO_PAGO_PUBLIC_KEY=sua_key
+    REACT_APP_ACCESS_TOKEN_MERCADO_PAGO=seu_token
+    ```
+4. Execute o projeto:
+    ```bash
+    npm start
+    ```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## 🔗 Próximos Passos
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- 🚀 **Implementação de um Backend Real**: Expandir o projeto para incluir um servidor com banco de dados.
+- 🌐 **Integração com APIs Externas**: Adicionar dados dinâmicos por meio de integrações com APIs.
+- 📱 **Melhoria na Responsividade e Acessibilidade**: Garantir uma experiência de usuário otimizada em todos os dispositivos.
 
-### Code Splitting
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## 👨‍💻 Autor
 
-### Analyzing the Bundle Size
+Desenvolvido por **Erick Silvério** como um estudo de caso para a loja **Matheus Calçados**.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Sinta-se à vontade para **contribuir**, **reportar problemas** ou **dar sugestões**! 😊
 
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+🔗 **Entre em Contato**  
+Você pode me encontrar no [LinkedIn](https://www.linkedin.com/in/erick-silv%C3%A9rio-024576248/) para conversar sobre o projeto ou futuras colaborações!
