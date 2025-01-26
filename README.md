@@ -67,14 +67,14 @@ A estrutura de pastas do projeto foi organizada para facilitar a escalabilidade 
 ### Passos para executar:
 1. Clone o repositório:
    ```bash
-   git clone https://github.com/seu-usuario/seu-repositorio.git
+   git clone https://github.com/ErickSilverio00/ecommerce.git
    cd seu-repositorio
    ```
 2. Instale as dependências:
     ```bash
     npm install
     ```
-3. Configure as variáveis de ambiente: Crie um arquivo .env na raiz do projeto com as seguintes variáveis:
+3. Configure as variáveis de ambiente: Crie um arquivo .env, .env.local e .env.producao na raiz do projeto com as seguintes variáveis:
     ```bash
     REACT_APP_MERCADO_PAGO_PUBLIC_KEY=sua_key
     REACT_APP_ACCESS_TOKEN_MERCADO_PAGO=seu_token
