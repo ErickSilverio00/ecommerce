@@ -99,7 +99,7 @@ export default function Inicio({
         </ContainerNav>
       </ContainerPrimeirosItens>
       <ContainerUltimoPedido>
-        {listaCompras.length > 0 && (
+        {listaCompras && listaCompras.length > 0 && (
           <ContainerTevePedido>
             <ContainerTituloTevePedido>
               <ShoppingCart size={22} weight="bold" color={colors.preto2} />
@@ -189,7 +189,7 @@ export default function Inicio({
             </ContainerPedido>
           </ContainerTevePedido>
         )}
-        {listaCompras.length === 0 && (
+        {listaCompras && listaCompras.length === 0 && (
           <ContainerNaoTevePedido>
             <TituloNaoTevePedido>
               Você ainda não fez nenhum pedido conosco!
