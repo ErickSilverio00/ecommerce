@@ -242,7 +242,7 @@ export default function MeusPedidos({
           ))}
         </ContainerPedidos>
       )}
-      {listaCompras.length === 0 && (
+      {listaCompras && listaCompras.length === 0 && (
         <ContainerNaoTevePedido>
           <TituloNaoTevePedido>
             Você ainda não fez nenhum pedido conosco!
