@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@emotion/react": "^11.7.1", 
+    "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.7.1",
     "@mercadopago/sdk-react": "^0.0.23",
     "@mui/icons-material": "^6.4.1",
@@ -21,7 +21,7 @@
     "dotenv": "^16.4.7",
     "ecommerce": "file:",
     "jwt-decode": "^4.0.0",
-    "lottie-react": "^2.4.0",
+    "lottie-react": "^2.4.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-input-mask": "^2.0.4",
