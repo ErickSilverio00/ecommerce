@@ -75,7 +75,7 @@ export default function MeusPedidos({
           <TextoMeusPedidos>Meus dados</TextoMeusPedidos>
         </ContainerBlocoNav>
       </ContainerNav>
-      {listaCompras.length > 0 && (
+      {listaCompras && listaCompras.length > 0 && (
         <ContainerPedidos>
           {listaCompras.map((compra) => (
             <Accordion style={{ backgroundColor: "#f5f5f5" }}>
@@ -178,44 +178,46 @@ export default function MeusPedidos({
                   <TituloItem>Total</TituloItem>
                 </FirstLine>
                 <Containerprodutos>
-                  {compra.detalhesVenda.map((detalhe) => (
-                    <ContainerItemComprado>
-                      <ContainerInfosProduto>
-                        <ContainerImagemProduto>
-                          <ImagemProduto
-                            src={
-                              detalhe.variacaoProduto
-                                .imagens_variacao_produto[0]
-                            }
-                          />
-                        </ContainerImagemProduto>
-                        <ContainerEscritasProdutos>
-                          <TextoNomeProduto>
-                            {detalhe.variacaoProduto.nome_produto}
-                          </TextoNomeProduto>
-                          <TextoInfosProduto>
-                            Cor: {detalhe.variacaoProduto.cor_variacao_produto}{" "}
-                            | Tamanho:{" "}
-                            {detalhe.variacaoProduto.medida_variacao_produto}
-                          </TextoInfosProduto>
-                          <TextoInfosProduto>
-                            Preço unitário:{" "}
-                            {formatarMoeda(
-                              detalhe.variacaoProduto.preco_venda_produto
-                            )}
-                          </TextoInfosProduto>
-                          <TextoInfosProduto>
-                            Quantidade: {detalhe.detalhe.quantidade}
-                          </TextoInfosProduto>
-                        </ContainerEscritasProdutos>
-                      </ContainerInfosProduto>
-                      <ContainerInfosPrecos>
-                        <TextoTotal>
-                          {formatarMoeda(detalhe.detalhe.valor_total)}
-                        </TextoTotal>
-                      </ContainerInfosPrecos>
-                    </ContainerItemComprado>
-                  ))}
+                  {compra.detalhesVenda &&
+                    compra.detalhesVenda.map((detalhe) => (
+                      <ContainerItemComprado>
+                        <ContainerInfosProduto>
+                          <ContainerImagemProduto>
+                            <ImagemProduto
+                              src={
+                                detalhe.variacaoProduto
+                                  .imagens_variacao_produto[0]
+                              }
+                            />
+                          </ContainerImagemProduto>
+                          <ContainerEscritasProdutos>
+                            <TextoNomeProduto>
+                              {detalhe.variacaoProduto.nome_produto}
+                            </TextoNomeProduto>
+                            <TextoInfosProduto>
+                              Cor:{" "}
+                              {detalhe.variacaoProduto.cor_variacao_produto} |
+                              Tamanho:{" "}
+                              {detalhe.variacaoProduto.medida_variacao_produto}
+                            </TextoInfosProduto>
+                            <TextoInfosProduto>
+                              Preço unitário:{" "}
+                              {formatarMoeda(
+                                detalhe.variacaoProduto.preco_venda_produto
+                              )}
+                            </TextoInfosProduto>
+                            <TextoInfosProduto>
+                              Quantidade: {detalhe.detalhe.quantidade}
+                            </TextoInfosProduto>
+                          </ContainerEscritasProdutos>
+                        </ContainerInfosProduto>
+                        <ContainerInfosPrecos>
+                          <TextoTotal>
+                            {formatarMoeda(detalhe.detalhe.valor_total)}
+                          </TextoTotal>
+                        </ContainerInfosPrecos>
+                      </ContainerItemComprado>
+                    ))}
                 </Containerprodutos>
                 <BlocoFinal>
                   <TextoTotal>DESCONTO</TextoTotal>

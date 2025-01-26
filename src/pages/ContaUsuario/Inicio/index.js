@@ -189,7 +189,7 @@ export default function Inicio({
             </ContainerPedido>
           </ContainerTevePedido>
         )}
-        {listaCompras && listaCompras.length === 0 && (
+        {listaCompras.length === 0 && (
           <ContainerNaoTevePedido>
             <TituloNaoTevePedido>
               Você ainda não fez nenhum pedido conosco!
