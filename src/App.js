@@ -1,12 +1,22 @@
 import { jwtDecode } from "jwt-decode";
 import React, { useEffect } from "react";
-import { BrowserRouter as Router } from "react-router-dom";
+import { BrowserRouter as Router, useLocation } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import useAuthStore from "./stores/useAuthStore";
 import Rotas from "./routes";
+import useAuthStore from "./stores/useAuthStore";
 import GlobalStyle from "./styles/global";
 import LayoutBase from "./templates/LayoutBase";
+
+function ScrollToTop() {
+  const location = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
+
+  return null;
+}
 
 function App() {
   const { login, logout } = useAuthStore();
@@ -49,6 +59,7 @@ function App() {
 
   return (
     <Router>
+      <ScrollToTop />
       <LayoutBase>
         <Rotas />
         <ToastContainer autoClose={3000} theme="light" position="top-center" />
